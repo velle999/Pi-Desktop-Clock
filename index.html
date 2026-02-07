@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Smart Alarm Clock</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(180deg, #1a2332 0%, #0d1117 100%);
+            color: white;
+            overflow-x: hidden;
+            transition: filter 0.5s ease;
+        }
+
+        body.night-mode { filter: brightness(70%); }
+
+        /* Weather Effects Container */
+        #weather-effects {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999;
+            overflow: hidden;
+        }
+
+        .rain-layer, .snow-layer, .wind-layer {
+            position: absolute; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-repeat: repeat;
+            background-size: contain;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        @keyframes rainFall {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 500px; }
+        }
+
+        @keyframes snowFall {
+            0% { background-position: 0 0; }
+            100% { background-position: 200px 1000px; }
+        }
+
+        @keyframes windBlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* Main Container - 480x800 */
+        .container {
+            width: 480px;
+            height: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Time Header */
+        .time-header {
+            background: linear-gradient(180deg, #2d3b4e 0%, #1f2937 100%);
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .time-display {
+            font-size: 64px;
+            font-weight: 300;
+            letter-spacing: -2px;
+        }
+
+        .date-display {
+            font-size: 18px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        /* Control Buttons */
+        .controls {
+            position: absolute;
+            top: 15px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            max-width: 200px;
+        }
+
+        .controls.left { left: 10px; }
+        .controls.right { right: 10px; }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Weather Section */
+        .weather-section {
+            padding: 15px 20px;
+            background: rgba(45, 59, 78, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .weather-icon { font-size: 42px; }
+        
+        .weather-info { flex: 1; }
+
+        .current-temp {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .weather-desc {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Financial Section */
+        .financial-section {
+            padding: 12px 20px;
+            background: rgba(31, 41, 55, 0.5);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .financial-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        /* Radar Map */
+        #radar-container {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+            position: relative;
+        }
+
+        #radar-container.active {
+            height: 200px;
+        }
+
+        #radar-map {
+            width: 100%;
+            height: 100%;
+        }
+
+        #radar-timestamp {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            z-index: 1000;
+        }
+
+        /* Forecast */
+        #five-day-forecast {
+            padding: 12px 15px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .forecast-day {
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .forecast-icon img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .forecast-text {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* News Ticker */
+        #news-ticker {
+            background: #0a0e14;
+            padding: 8px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        #news-items {
+            white-space: nowrap;
+            animation: scrollNews 60s linear infinite;
+            font-size: 12px;
+        }
+
+        @keyframes scrollNews {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Weather Alerts */
+        #weatherAlerts {
+            padding: 8px 15px;
+            font-size: 11px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        .alert {
+            padding: 6px;
+            margin: 4px 0;
+            border-radius: 4px;
+            background: rgba(255, 100, 0, 0.3);
+            border-left: 3px solid #ff6400;
+        }
+
+        /* Emergency Overlay */
+        #emergency-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+        }
+
+        #emergency-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ff0000;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 90%;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        #emergency-scrollbox {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 12px;
+            padding: 8px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        #stop-button {
+            margin-top: 15px;
+            padding: 8px 25px;
+            background: white;
+            color: red;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Animal Companions */
+        #animal-companion {
+            position: fixed;
+            bottom: 15px;
+            left: 30px;
+            font-size: 36px;
+            animation: roam 20s linear infinite alternate;
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+
+        #dog-companion {
+            position: fixed;
+            bottom: 15px;
+            right: 30px;
+            font-size: 36px;
+            animation: dog-roam 24s linear infinite alternate;
+            z-index: 100;
+        }
+
+        @keyframes roam {
+            0% { left: 30px; }
+            100% { left: calc(100% - 80px); }
+        }
+
+        @keyframes dog-roam {
+            0% { right: 30px; }
+            100% { right: calc(100% - 80px); }
+        }
+
+        .fox-happy { animation: bounce 0.5s ease 4 !important; }
+        .dog-happy { animation: bounce 0.5s ease 4 !important; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Carrot Rain */
+        #carrot-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        .carrot {
+            position: absolute;
+            font-size: 20px;
+        }
+
+        @keyframes fall {
+            to { top: 100vh; transform: rotate(360deg); }
+        }
+
+        /* Settings Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: linear-gradient(180deg, #2d3b4e 0%, #1f2937 100%);
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 380px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 9px;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 9px;
+            font-size: 13px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #d97706;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Matrix Effect */
+        #matrix-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9997;
+            display: none;
+        }
+
+        /* Games */
+        #tetris-wrapper, #wolf3d-wrapper {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95);
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 10002;
+        }
+
+        #tetris-wrapper.tetris-active,
+        #wolf3d-wrapper.active {
+            display: block;
+        }
+
+        #tetris-canvas {
+            display: block;
+            margin: 0 auto;
+            background: #000;
+            border: 2px solid #333;
+        }
+
+        #wolf3d-iframe {
+            width: 640px;
+            height: 480px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        /* Spotify Player */
+        #spotifyPlayer {
+            display: none;
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            width: 280px;
+            height: 360px;
+            z-index: 1000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+
+        #spotifyIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Debug Panel */
+        #debug-panel {
+            position: fixed;
+            bottom: 250px;
+            left: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.8);
+            color: lime;
+            font-size: 11px;
+            z-index: 99999;
+            border-radius: 6px;
+            font-family: monospace;
+            max-width: 280px;
+            display: none;
+        }
+
+        /* Bottom Controls */
+        .bottom-controls {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-width: 90%;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Effects Layers -->
+    <div id="weather-effects"></div>
+    <div id="carrot-layer"></div>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="container">
+        <!-- Time Header -->
+        <div class="time-header">
+            <div class="controls left">
+                <button class="control-btn" id="settings-button" title="Settings">⚙️</button>
+                <button class="control-btn" id="night-toggle" title="Night Mode">☀️🌙</button>
+                <button class="control-btn" id="debug-toggle" title="Debug">🐞</button>
+            </div>
+
+            <div class="controls right">
+                <button class="control-btn" id="radar-toggle" title="Radar">🛰️</button>
+                <button class="control-btn" id="stocks-toggle" title="Stocks">📺</button>
+                <button class="control-btn" id="news-toggle" title="News">📰</button>
+                <button class="control-btn" id="carrot-toggle" title="Carrot Rain">🥕</button>
+            </div>
+
+            <div class="time-display" id="time">12:00:00</div>
+            <div class="date-display" id="date">Loading...</div>
+        </div>
+
+        <!-- Weather -->
+        <div class="weather-section">
+            <div class="weather-icon" id="weatherIcon">🌤️</div>
+            <div class="weather-info">
+                <div class="current-temp" id="currentTemp">--°F</div>
+                <div class="weather-desc" id="weatherDesc">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Financial -->
+        <div class="financial-section" id="stocks-container">
+            <div class="financial-row">
+                <span id="btcprice">BTC: Loading...</span>
+            </div>
+            <div class="financial-row">
+                <span id="stockData">Stock: Loading...</span>
+            </div>
+        </div>
+
+        <!-- Radar -->
+        <div id="radar-container">
+            <div id="radar-map"></div>
+            <div id="radar-timestamp">Radar loading...</div>
+        </div>
+
+        <!-- Forecast -->
+        <div id="five-day-forecast"></div>
+
+        <!-- Alerts -->
+        <div id="weatherAlerts"></div>
+
+        <!-- News -->
+        <div id="news-ticker">
+            <div id="news-items">Loading news...</div>
+        </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="bottom-controls">
+        <button class="control-btn" id="tetris-toggle" title="Tetris">🎮</button>
+        <button class="control-btn" id="wolf3d-gun-toggle" title="Wolf3D">🔫</button>
+        <button class="control-btn" id="treat-toggle" title="Give Treat">🦴</button>
+        <button class="control-btn" id="dew-toggle" title="Mountain Dew">🥤</button>
+        <button class="control-btn" id="matrix-toggle" title="Matrix">💻</button>
+        <button class="control-btn" id="spotifyPlayButton" title="Music">🎵</button>
+        <button class="control-btn" id="ahahah-button" title="Ahahah">😂</button>
+    </div>
+
+    <!-- Companions -->
+    <div id="animal-companion">🦊</div>
+    <div id="dog-companion">🐕</div>
+
+    <!-- Emergency -->
+    <div id="emergency-overlay">
+        <div id="emergency-message">
+            <h2 id="emergency-intro">⚠️ WARNING</h2>
+            <div id="emergency-scrollbox"></div>
+            <button id="stop-button">STOP ALERT</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">⚙️ Settings</div>
+            <div class="form-group">
+                <label class="form-label">ZIP Code</label>
+                <input type="text" id="zipInput" class="form-input" maxlength="5" placeholder="63090">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Stock Symbol</label>
+                <input type="text" id="stockInput" class="form-input" placeholder="NVDA">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Time Format</label>
+                <select id="timeFormatInput" class="form-input">
+                    <option value="12">12-hour</option>
+                    <option value="24">24-hour</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">AlphaVantage API Key (optional)</label>
+                <input type="text" id="apiKeyInput" class="form-input" placeholder="Your API key">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tetris -->
+    <div id="tetris-wrapper">
+        <canvas id="tetris-canvas" width="300" height="600"></canvas>
+        <button class="btn btn-secondary" style="margin-top:10px;width:100%;" onclick="document.getElementById('tetris-wrapper').classList.remove('tetris-active')">Close</button>
+    </div>
+
+    <!-- Wolf3D -->
+    <div id="wolf3d-wrapper">
+        <iframe id="wolf3d-iframe" src=""></iframe>
+        <button class="btn btn-secondary" style="margin-top:10px;width:100%;" onclick="document.getElementById('wolf3d-wrapper').classList.remove('active')">Close</button>
+    </div>
+
+    <!-- Spotify -->
+    <div id="spotifyPlayer">
+        <iframe id="spotifyIframe" allow="encrypted-media" src=""></iframe>
+        <button id="spotifyStopButton" class="control-btn" style="position:absolute;top:5px;right:5px;">✕</button>
+    </div>
+
+    <!-- Debug Panel -->
+    <div id="debug-panel">
+        <strong>🐞 Debug Panel</strong><br>
+        <div id="debug-weather">Weather: Unknown</div>
+        <div id="debug-weather-class">Class: None</div>
+        <div id="debug-radar">Radar: Unknown</div>
+        <div id="debug-stocks">Stocks: Unknown</div>
+    </div>
+
+    <!-- Ahahah Image -->
+    <img id="ahahah-image" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" 
+         style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;max-width:300px;border-radius:10px;" alt="Ahahah">
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            WEATHER_API_KEY: 'c8e85b9c5cd854c7aac3bb9042e0801b',
+            STOCK_API_KEY: localStorage.getItem('alphaVantageApiKey') || 'R83AYXIEJ0K71FUR',
+            CORS_PROXY: 'https://api.allorigins.win/raw?url=',
+            DEFAULT_ZIP: localStorage.getItem('weatherZip') || '63090',
+            DEFAULT_STOCK: localStorage.getItem('stockSymbol') || 'NVDA',
+            DEFAULT_ZONE: 'MOZ070'
+        };
+
+        let currentZip = CONFIG.DEFAULT_ZIP;
+        let currentStockSymbol = CONFIG.DEFAULT_STOCK;
+        let hourFormat = localStorage.getItem('hourFormat') || '12';
+        let manualNightOverride = null;
+        let radarActive = false;
+        let radarMap = null;
+        let radarLayer = null;
+        let radarCoordinates = { lat: 38.6270, lng: -90.1994 };
+        let carrotInterval = null;
+        let matrixInterval = null;
+
+        // DOM Elements
+        const elements = {
+            time: $('#time'),
+            date: $('#date'),
+            btcPrice: $('#btcprice'),
+            stockData: $('#stockData'),
+            weatherAlerts: $('#weatherAlerts'),
+            currentTemp: $('#currentTemp'),
+            currentDesc: $('#weatherDesc'),
+            currentIcon: $('#weatherIcon'),
+            radarTimestamp: $('#radar-timestamp')
+        };
+
+        // Utility Functions
+        async function fetchWithRetry(url, options = {}, retries = 3) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                if (retries > 0) {
+                    await new Promise(r => setTimeout(r, 2000));
+                    return fetchWithRetry(url, options, retries - 1);
+                }
+                throw error;
+            }
+        }
+
+        // Weather Functions
+        async function fetchWeather() {
+            try {
+                const url = `https://api.openweathermap.org/data/2.5/weather?zip=${currentZip},US&appid=${CONFIG.WEATHER_API_KEY}&units=imperial`;
+                const data = await fetchWithRetry(url);
+                
+                const temp = Math.round(data.main.temp);
+                const desc = data.weather[0].description;
+                const icon = data.weather[0].icon;
+                
+                elements.currentTemp.text(`${temp}°F`);
+                elements.currentDesc.text(desc);
+                elements.currentIcon.html(`<img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${desc}" style="width:42px;height:42px;">`);
+                
+                // Weather effects
+                applyWeatherEffects(desc);
+                
+                // Update radar location
+                if (data.coord) {
+                    updateRadarLocation(data.coord.lat, data.coord.lon);
+                }
+            } catch (error) {
+                console.error('Weather fetch failed:', error);
+                elements.currentTemp.text('N/A');
+                elements.currentDesc.text('Unavailable');
+            }
+        }
+
+        function applyWeatherEffects(desc) {
+            const container = document.getElementById('weather-effects');
+            if (!container) return;
+            
+            const d = desc.toLowerCase();
+            
+            // Clear existing layers
+            container.innerHTML = '';
+            
+            if (d.includes('rain') || d.includes('drizzle')) {
+                const rain = document.createElement('div');
+                rain.className = 'rain-layer';
+                rain.style.backgroundImage = "url('https://velle999.github.io/BTC-Weather-Radar/assets/effects/rain.png')";
+                rain.style.animation = 'rainFall 0.8s linear infinite';
+                rain.style.opacity = '0.6';
+                container.appendChild(rain);
+            } else if (d.includes('snow')) {
+                const snow = document.createElement('div');
+                snow.className = 'snow-layer';
+                snow.style.backgroundImage = "url('https://velle999.github.io/BTC-Weather-Radar/assets/effects/snow.png')";
+                snow.style.animation = 'snowFall 3s linear infinite';
+                snow.style.opacity = '0.7';
+                container.appendChild(snow);
+            } else if (d.includes('thunder') || d.includes('storm')) {
+                flashLightning();
+            }
+        }
+
+        function flashLightning() {
+            const flash = document.createElement('div');
+            flash.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:white;opacity:0.8;z-index:10000;pointer-events:none;';
+            document.body.appendChild(flash);
+            setTimeout(() => flash.remove(), 150);
+        }
+
+        // Forecast
+        async function fetchForecast() {
+            try {
+                const url = `https://api.openweathermap.org/data/2.5/forecast?zip=${currentZip},US&appid=${CONFIG.WEATHER_API_KEY}&units=imperial`;
+                const data = await fetchWithRetry(url);
+                
+                const container = $('#five-day-forecast');
+                container.empty();
+                
+                const forecasts = data.list.filter(item => item.dt_txt.includes('12:00:00')).slice(0, 5);
+                forecasts.forEach(f => {
+                    const day = moment(f.dt_txt).format('ddd');
+                    const icon = f.weather[0].icon;
+                    const temp = Math.round(f.main.temp_max);
+                    container.append(`
+                        <div class="forecast-day">
+                            <div class="forecast-icon">
+                                <img src="https://openweathermap.org/img/wn/${icon}.png" alt="">
+                            </div>
+                            <div class="forecast-text">${day}: ${temp}°F</div>
+                        </div>
+                    `);
+                });
+            } catch (error) {
+                console.error('Forecast failed:', error);
+            }
+        }
+
+        // Stock Data
+        async function fetchStockData() {
+            try {
+                const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${currentStockSymbol}&apikey=${CONFIG.STOCK_API_KEY}`;
+                const data = await fetchWithRetry(url);
+                const quote = data["Global Quote"];
+                
+                if (quote && quote["05. price"]) {
+                    const price = parseFloat(quote["05. price"]).toFixed(2);
+                    const change = parseFloat(quote["09. change"] || 0).toFixed(2);
+                    const changePct = parseFloat(quote["10. change percent"] || 0).toFixed(2);
+                    const color = parseFloat(change) >= 0 ? '#4CAF50' : '#F44336';
+                    
+                    elements.stockData.html(`
+                        ${currentStockSymbol}: $${price} 
+                        <span style="color:${color}">(${change >= 0 ? '+' : ''}${change})</span>
+                    `);
+                }
+            } catch (error) {
+                console.error('Stock fetch failed:', error);
+                elements.stockData.html(`${currentStockSymbol}: Unavailable`);
+            }
+        }
+
+        // Bitcoin
+        async function fetchBitcoinPrice() {
+            try {
+                const data = await fetchWithRetry('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+                if (data.bitcoin && data.bitcoin.usd) {
+                    elements.btcPrice.text(`BTC: $${data.bitcoin.usd.toLocaleString()}`);
+                }
+            } catch (error) {
+                console.error('Bitcoin fetch failed:', error);
+            }
+        }
+
+        // Radar
+        function initRadar() {
+            const leafletScript = document.createElement('script');
+            leafletScript.src = 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js';
+            leafletScript.onload = setupRadarMap;
+            document.head.appendChild(leafletScript);
+        }
+
+        function setupRadarMap() {
+            radarMap = L.map('radar-map', {
+                attributionControl: false,
+                zoomControl: false,
+                dragging: false
+            }).setView([radarCoordinates.lat, radarCoordinates.lng], 8);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(radarMap);
+            loadRadarData();
+        }
+
+        async function loadRadarData() {
+            if (!radarActive || !radarMap) return;
+            try {
+                const data = await fetchWithRetry('https://api.rainviewer.com/public/weather-maps.json');
+                if (data.radar && data.radar.past && data.radar.past.length) {
+                    const latest = data.radar.past[data.radar.past.length - 1];
+                    const url = `https://tilecache.rainviewer.com${latest.path}/256/{z}/{x}/{y}/2/1_1.png`;
+                    
+                    if (radarLayer) radarMap.removeLayer(radarLayer);
+                    radarLayer = L.tileLayer(url, { opacity: 0.7 });
+                    radarLayer.addTo(radarMap);
+                    
+                    const timestamp = new Date(latest.time * 1000).toLocaleTimeString();
+                    elements.radarTimestamp.text(`Updated: ${timestamp}`);
+                }
+            } catch (error) {
+                console.error('Radar failed:', error);
+            }
+        }
+
+        function updateRadarLocation(lat, lon) {
+            radarCoordinates = { lat, lon };
+            if (radarMap) {
+                radarMap.setView([lat, lon], 8);
+                loadRadarData();
+            }
+        }
+
+        // News
+        async function fetchNewsHeadlines() {
+            try {
+                const response = await fetch(`${CONFIG.CORS_PROXY}https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en`);
+                const xmlText = await response.text();
+                const parsed = new DOMParser().parseFromString(xmlText, 'text/xml');
+                const items = parsed.querySelectorAll('item');
+                
+                const headlines = Array.from(items).slice(0, 10).map(item => {
+                    const titleEl = item.querySelector('title');
+                    return titleEl ? titleEl.textContent : '';
+                }).filter(Boolean);
+                
+                $('#news-items').html(headlines.join(' 🥕 '));
+            } catch (error) {
+                console.error('News failed:', error);
+            }
+        }
+
+        // Time
+        function updateTime() {
+            const now = moment();
+            elements.time.text(now.format(hourFormat === '12' ? 'hh:mm:ss A' : 'HH:mm:ss'));
+            elements.date.text(now.format('MMM DD, YYYY'));
+            applyNightMode();
+            setTimeout(updateTime, 1000 - now.milliseconds());
+        }
+
+        function applyNightMode() {
+            const hour = new Date().getHours();
+            const autoNight = (hour >= 22 || hour < 6);
+            const isNight = manualNightOverride !== null ? manualNightOverride : autoNight;
+            document.body.classList.toggle('night-mode', isNight);
+        }
+
+        // Companions
+        function giveDogTreat() {
+            const dog = $('#dog-companion');
+            dog.addClass('dog-happy');
+            setTimeout(() => dog.removeClass('dog-happy'), 2000);
+        }
+
+        function giveMountainDew() {
+            const fox = $('#animal-companion');
+            fox.addClass('fox-happy');
+            setTimeout(() => fox.removeClass('fox-happy'), 2000);
+        }
+
+        // Carrot Rain
+        function createCarrot() {
+            const carrot = document.createElement('div');
+            carrot.className = 'carrot';
+            carrot.textContent = '🥕';
+            carrot.style.left = Math.random() * window.innerWidth + 'px';
+            carrot.style.top = '-50px';
+            carrot.style.animation = `fall ${5 + Math.random() * 5}s linear`;
+            document.getElementById('carrot-layer').appendChild(carrot);
+            setTimeout(() => carrot.remove(), 10000);
+        }
+
+        // Matrix Effect
+        function toggleMatrix() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            if (matrixInterval) {
+                clearInterval(matrixInterval);
+                matrixInterval = null;
+                canvas.style.display = 'none';
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.display = 'block';
+            
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+            const fontSize = 14;
+            const columns = Math.floor(canvas.width / fontSize);
+            const drops = Array(columns).fill(1);
+            
+            matrixInterval = setInterval(() => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0F0';
+                ctx.font = `${fontSize}px monospace`;
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = letters[Math.floor(Math.random() * letters.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }, 50);
+        }
+
+        // Emergency Alert System
+        async function fetchWeatherAlerts() {
+            try {
+                const url = `https://api.weather.gov/alerts/active/zone/${CONFIG.DEFAULT_ZONE}`;
+                const data = await fetchWithRetry(url);
+                
+                if (data.features && data.features.length > 0) {
+                    const alertsHtml = data.features.map(alert => {
+                        const event = alert.properties.event;
+                        const desc = alert.properties.description;
+                        return `<div class="alert"><strong>${event}</strong><br><small>${desc}</small></div>`;
+                    }).join('');
+                    elements.weatherAlerts.html(alertsHtml);
+                } else {
+                    elements.weatherAlerts.html('<div>No active alerts</div>');
+                }
+            } catch (error) {
+                console.error('Alerts failed:', error);
+            }
+        }
+
+        function stopEmergency() {
+            $('#emergency-overlay').hide();
+            if (window.emergencyAudio) {
+                window.emergencyAudio.pause();
+                window.emergencyAudio = null;
+            }
+        }
+
+        // UI Controls Setup
+        function setupUIControls() {
+            // Settings
+            $('#settings-button').click(() => {
+                $('#zipInput').val(currentZip);
+                $('#stockInput').val(currentStockSymbol);
+                $('#timeFormatInput').val(hourFormat);
+                $('#apiKeyInput').val(CONFIG.STOCK_API_KEY);
+                $('#settingsModal').addClass('active');
+            });
+            
+            $('#cancelBtn').click(() => $('#settingsModal').removeClass('active'));
+            
+            $('#saveBtn').click(() => {
+                currentZip = $('#zipInput').val() || CONFIG.DEFAULT_ZIP;
+                currentStockSymbol = $('#stockInput').val().toUpperCase() || CONFIG.DEFAULT_STOCK;
+                hourFormat = $('#timeFormatInput').val();
+                const apiKey = $('#apiKeyInput').val();
+                
+                localStorage.setItem('weatherZip', currentZip);
+                localStorage.setItem('stockSymbol', currentStockSymbol);
+                localStorage.setItem('hourFormat', hourFormat);
+                if (apiKey) {
+                    CONFIG.STOCK_API_KEY = apiKey;
+                    localStorage.setItem('alphaVantageApiKey', apiKey);
+                }
+                
+                $('#settingsModal').removeClass('active');
+                fetchWeather();
+                fetchForecast();
+                fetchStockData();
+            });
+            
+            // Night Mode Toggle
+            $('#night-toggle').click(() => {
+                if (manualNightOverride === null) manualNightOverride = true;
+                else if (manualNightOverride === true) manualNightOverride = false;
+                else manualNightOverride = null;
+                applyNightMode();
+            });
+            
+            // Radar Toggle
+            $('#radar-toggle').click(() => {
+                radarActive = !radarActive;
+                $('#radar-container').toggleClass('active', radarActive);
+                if (radarActive && !radarMap) initRadar();
+                if (radarActive) loadRadarData();
+            });
+            
+            // Stocks Toggle
+            $('#stocks-toggle').click(() => {
+                const isHidden = $('#stocks-container').is(':hidden');
+                $('#stocks-container').toggle();
+            });
+            
+            // News Toggle
+            $('#news-toggle').click(() => {
+                const isHidden = $('#news-ticker').is(':hidden');
+                if (isHidden) {
+                    fetchNewsHeadlines();
+                    $('#news-ticker').show();
+                } else {
+                    $('#news-ticker').hide();
+                }
+            });
+            
+            // Carrot Rain
+            $('#carrot-toggle').click(() => {
+                if (!carrotInterval) {
+                    carrotInterval = setInterval(createCarrot, 250);
+                } else {
+                    clearInterval(carrotInterval);
+                    carrotInterval = null;
+                    $('#carrot-layer').empty();
+                }
+            });
+            
+            // Treats
+            $('#treat-toggle').click(giveDogTreat);
+            $('#dew-toggle').click(giveMountainDew);
+            
+            // Games
+            $('#tetris-toggle').click(() => $('#tetris-wrapper').toggleClass('tetris-active'));
+            
+            $('#wolf3d-gun-toggle').click(() => {
+                const wrapper = $('#wolf3d-wrapper');
+                const iframe = $('#wolf3d-iframe');
+                wrapper.toggleClass('active');
+                if (wrapper.hasClass('active') && !iframe.attr('src')) {
+                    iframe.attr('src', 'https://archive.org/embed/wolfenstein3d_202105');
+                }
+            });
+            
+            // Matrix
+            $('#matrix-toggle').click(toggleMatrix);
+            
+            // Spotify
+            $('#spotifyPlayButton').click(() => {
+                const player = $('#spotifyPlayer');
+                const iframe = $('#spotifyIframe');
+                player.show();
+                if (!iframe.attr('src')) {
+                    iframe.attr('src', 'https://open.spotify.com/embed/playlist/37i9dQZF1DZ06evO2O09Hg');
+                }
+            });
+            
+            $('#spotifyStopButton').click(() => {
+                $('#spotifyPlayer').hide();
+                $('#spotifyIframe').attr('src', '');
+            });
+            
+            // Ahahah
+            $('#ahahah-button').click(() => {
+                const img = $('#ahahah-image');
+                const audio = new Audio('sounds/ahahah.mp3');
+                audio.play().catch(() => {});
+                img.show();
+                setTimeout(() => img.hide(), 3000);
+            });
+            
+            // Debug
+            $('#debug-toggle').click(() => $('#debug-panel').toggle());
+            
+            // Emergency stop
+            $('#stop-button').click(stopEmergency);
+        }
+
+        // Initialize
+        function initializeApp() {
+            console.log('🚀 Initializing...');
+            updateTime();
+            fetchWeather();
+            fetchForecast();
+            fetchStockData();
+            fetchBitcoinPrice();
+            fetchWeatherAlerts();
+            setupUIControls();
+            
+            // Auto-refresh intervals
+            setInterval(fetchWeather, 600000); // 10 min
+            setInterval(fetchForecast, 600000);
+            setInterval(fetchStockData, 65000); // ~1 min
+            setInterval(fetchBitcoinPrice, 60000);
+            setInterval(fetchWeatherAlerts, 900000); // 15 min
+        }
+
+        $(document).ready(initializeApp);
+    </script>
+</body>
+</html>
