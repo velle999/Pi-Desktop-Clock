@@ -52,7 +52,7 @@
             100% { background-position: 1000px 0; }
         }
 
-        /* Main Container - 480x800 */
+        /* Main Container - 480x800 Portrait */
         .container {
             width: 480px;
             height: 800px;
@@ -60,50 +60,73 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            overflow: hidden;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+
+        .content-wrapper::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .content-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
         }
 
         /* Time Header */
         .time-header {
             background: linear-gradient(180deg, #2d3b4e 0%, #1f2937 100%);
-            padding: 25px 20px;
+            padding: 50px 15px 20px;
             text-align: center;
             position: relative;
+            flex-shrink: 0;
         }
 
         .time-display {
-            font-size: 64px;
+            font-size: 56px;
             font-weight: 300;
-            letter-spacing: -2px;
+            letter-spacing: -1px;
+            line-height: 1;
         }
 
         .date-display {
-            font-size: 18px;
-            margin-top: 8px;
+            font-size: 16px;
+            margin-top: 6px;
             opacity: 0.9;
         }
 
-        /* Control Buttons */
+        /* Control Buttons - Compact Grid */
         .controls {
             position: absolute;
-            top: 15px;
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            max-width: 200px;
+            top: 8px;
+            display: grid;
+            grid-template-columns: repeat(2, 30px);
+            gap: 5px;
         }
 
-        .controls.left { left: 10px; }
-        .controls.right { right: 10px; }
+        .controls.left { left: 8px; }
+        .controls.right { right: 8px; }
 
         .control-btn {
             background: rgba(255, 255, 255, 0.1);
             border: none;
-            border-radius: 6px;
-            width: 32px;
-            height: 32px;
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .control-btn:hover {
@@ -111,54 +134,77 @@
             transform: scale(1.05);
         }
 
-        /* Weather Section */
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Weather Section - Compact */
         .weather-section {
-            padding: 15px 20px;
+            padding: 12px 15px;
             background: rgba(45, 59, 78, 0.3);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
-        .weather-icon { font-size: 42px; }
+        .weather-icon { 
+            font-size: 36px;
+            flex-shrink: 0;
+        }
         
-        .weather-info { flex: 1; }
+        .weather-info { 
+            flex: 1;
+            min-width: 0;
+        }
 
         .current-temp {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: #f59e0b;
+            line-height: 1;
         }
 
         .weather-desc {
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0.9;
+            margin-top: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        /* Financial Section */
+        /* Financial Section - Compact */
         .financial-section {
-            padding: 12px 20px;
+            padding: 10px 15px;
             background: rgba(31, 41, 55, 0.5);
             border-top: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
         }
 
         .financial-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: 13px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            line-height: 1.3;
         }
 
-        /* Radar Map */
+        .financial-row:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Radar Map - Adjusted Height */
         #radar-container {
             height: 0;
             overflow: hidden;
             transition: height 0.3s ease;
             position: relative;
+            flex-shrink: 0;
         }
 
         #radar-container.active {
-            height: 200px;
+            height: 180px;
         }
 
         #radar-map {
@@ -168,50 +214,60 @@
 
         #radar-timestamp {
             position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.7);
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 10px;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0,0,0,0.8);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 9px;
             z-index: 1000;
         }
 
-        /* Forecast */
+        /* Forecast - Compact */
         #five-day-forecast {
-            padding: 12px 15px;
+            padding: 10px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             overflow-x: auto;
+            flex-shrink: 0;
+            scrollbar-width: none;
+        }
+
+        #five-day-forecast::-webkit-scrollbar {
+            display: none;
         }
 
         .forecast-day {
             text-align: center;
-            min-width: 70px;
+            min-width: 65px;
+            background: rgba(255,255,255,0.05);
+            padding: 6px;
+            border-radius: 6px;
         }
 
         .forecast-icon img {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
         }
 
         .forecast-text {
-            font-size: 12px;
-            margin-top: 4px;
+            font-size: 11px;
+            margin-top: 3px;
         }
 
-        /* News Ticker */
+        /* News Ticker - Compact */
         #news-ticker {
             background: #0a0e14;
-            padding: 8px 0;
+            padding: 6px 0;
             overflow: hidden;
             display: none;
+            flex-shrink: 0;
         }
 
         #news-items {
             white-space: nowrap;
             animation: scrollNews 60s linear infinite;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         @keyframes scrollNews {
@@ -219,12 +275,22 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* Weather Alerts */
+        /* Weather Alerts - Compact */
         #weatherAlerts {
-            padding: 8px 15px;
-            font-size: 11px;
-            max-height: 80px;
+            padding: 6px 12px;
+            font-size: 10px;
+            max-height: 70px;
             overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        #weatherAlerts::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        #weatherAlerts::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
         }
 
         .alert {
@@ -286,34 +352,34 @@
             cursor: pointer;
         }
 
-        /* Animal Companions */
+        /* Animal Companions - Smaller for Portrait */
         #animal-companion {
             position: fixed;
-            bottom: 15px;
-            left: 30px;
-            font-size: 36px;
+            bottom: 55px;
+            left: 20px;
+            font-size: 28px;
             animation: roam 20s linear infinite alternate;
-            z-index: 100;
+            z-index: 98;
             transition: transform 0.3s;
         }
 
         #dog-companion {
             position: fixed;
-            bottom: 15px;
-            right: 30px;
-            font-size: 36px;
+            bottom: 55px;
+            right: 20px;
+            font-size: 28px;
             animation: dog-roam 24s linear infinite alternate;
-            z-index: 100;
+            z-index: 98;
         }
 
         @keyframes roam {
-            0% { left: 30px; }
-            100% { left: calc(100% - 80px); }
+            0% { left: 20px; }
+            100% { left: calc(50% - 80px); }
         }
 
         @keyframes dog-roam {
-            0% { right: 30px; }
-            100% { right: calc(100% - 80px); }
+            0% { right: 20px; }
+            100% { right: calc(50% - 80px); }
         }
 
         .fox-happy { animation: bounce 0.5s ease 4 !important; }
@@ -479,18 +545,18 @@
             border-radius: 8px;
         }
 
-        /* Spotify Player */
+        /* Spotify Player - Optimized for Portrait */
         #spotifyPlayer {
             display: none;
             position: fixed;
-            bottom: 15px;
-            right: 15px;
-            width: 280px;
-            height: 360px;
+            bottom: 60px;
+            right: 10px;
+            width: 250px;
+            height: 320px;
             z-index: 1000;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.7);
         }
 
         #spotifyIframe {
@@ -499,33 +565,41 @@
             border: none;
         }
 
-        /* Debug Panel */
+        /* Debug Panel - Adjusted for Portrait */
         #debug-panel {
             position: fixed;
-            bottom: 250px;
-            left: 10px;
-            padding: 10px;
-            background: rgba(0,0,0,0.8);
+            bottom: 60px;
+            left: 8px;
+            padding: 8px;
+            background: rgba(0,0,0,0.9);
             color: lime;
-            font-size: 11px;
+            font-size: 9px;
             z-index: 99999;
-            border-radius: 6px;
+            border-radius: 5px;
             font-family: monospace;
-            max-width: 280px;
+            max-width: 200px;
             display: none;
         }
 
-        /* Bottom Controls */
+        /* Bottom Controls - Compact Grid for Portrait */
         .bottom-controls {
             position: fixed;
-            bottom: 15px;
+            bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            max-width: 90%;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(4, 36px);
+            gap: 6px;
+            z-index: 99;
+        }
+
+        .bottom-controls .control-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         /* Responsive */
@@ -563,51 +637,54 @@
             <div class="date-display" id="date">Loading...</div>
         </div>
 
-        <!-- Weather -->
-        <div class="weather-section">
-            <div class="weather-icon" id="weatherIcon">🌤️</div>
-            <div class="weather-info">
-                <div class="current-temp" id="currentTemp">--°F</div>
-                <div class="weather-desc" id="weatherDesc">Loading...</div>
+        <!-- Scrollable Content -->
+        <div class="content-wrapper">
+            <!-- Weather -->
+            <div class="weather-section">
+                <div class="weather-icon" id="weatherIcon">🌤️</div>
+                <div class="weather-info">
+                    <div class="current-temp" id="currentTemp">--°F</div>
+                    <div class="weather-desc" id="weatherDesc">Loading...</div>
+                </div>
             </div>
-        </div>
 
-        <!-- Financial -->
-        <div class="financial-section" id="stocks-container">
-            <div class="financial-row">
-                <span id="btcprice">BTC: Loading...</span>
+            <!-- Financial -->
+            <div class="financial-section" id="stocks-container">
+                <div class="financial-row">
+                    <span id="btcprice">BTC: Loading...</span>
+                </div>
+                <div class="financial-row">
+                    <span id="stockData">Stock: Loading...</span>
+                </div>
             </div>
-            <div class="financial-row">
-                <span id="stockData">Stock: Loading...</span>
+
+            <!-- Radar -->
+            <div id="radar-container">
+                <div id="radar-map"></div>
+                <div id="radar-timestamp">Radar loading...</div>
             </div>
-        </div>
 
-        <!-- Radar -->
-        <div id="radar-container">
-            <div id="radar-map"></div>
-            <div id="radar-timestamp">Radar loading...</div>
-        </div>
+            <!-- Forecast -->
+            <div id="five-day-forecast"></div>
 
-        <!-- Forecast -->
-        <div id="five-day-forecast"></div>
+            <!-- Alerts -->
+            <div id="weatherAlerts"></div>
 
-        <!-- Alerts -->
-        <div id="weatherAlerts"></div>
-
-        <!-- News -->
-        <div id="news-ticker">
-            <div id="news-items">Loading news...</div>
+            <!-- News -->
+            <div id="news-ticker">
+                <div id="news-items">Loading news...</div>
+            </div>
         </div>
     </div>
 
-    <!-- Bottom Controls -->
+    <!-- Bottom Controls - Two Rows -->
     <div class="bottom-controls">
         <button class="control-btn" id="tetris-toggle" title="Tetris">🎮</button>
         <button class="control-btn" id="wolf3d-gun-toggle" title="Wolf3D">🔫</button>
-        <button class="control-btn" id="treat-toggle" title="Give Treat">🦴</button>
-        <button class="control-btn" id="dew-toggle" title="Mountain Dew">🥤</button>
         <button class="control-btn" id="matrix-toggle" title="Matrix">💻</button>
         <button class="control-btn" id="spotifyPlayButton" title="Music">🎵</button>
+        <button class="control-btn" id="treat-toggle" title="Give Treat">🦴</button>
+        <button class="control-btn" id="dew-toggle" title="Mountain Dew">🥤</button>
         <button class="control-btn" id="ahahah-button" title="Ahahah">😂</button>
     </div>
 
