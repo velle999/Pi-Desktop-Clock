@@ -657,7 +657,7 @@
     <!-- Tetris -->
     <div id="tetris-wrapper">
         <canvas id="tetris-canvas" width="300" height="600"></canvas>
-        <button class="btn btn-secondary" style="margin-top:10px;width:100%;" onclick="document.getElementById('tetris-wrapper').classList.remove('tetris-active')">Close</button>
+        <button class="btn btn-secondary" id="tetris-close-btn" style="margin-top:10px;width:100%;">Close</button>
     </div>
 
     <!-- Wolf3D -->
@@ -829,24 +829,62 @@
         // Stock Data
         async function fetchStockData() {
             try {
-                const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${currentStockSymbol}&apikey=${CONFIG.STOCK_API_KEY}`;
-                const data = await fetchWithRetry(url);
-                const quote = data["Global Quote"];
+                console.log(`📊 Fetching stock data for ${currentStockSymbol}...`);
                 
-                if (quote && quote["05. price"]) {
-                    const price = parseFloat(quote["05. price"]).toFixed(2);
-                    const change = parseFloat(quote["09. change"] || 0).toFixed(2);
-                    const changePct = parseFloat(quote["10. change percent"] || 0).toFixed(2);
-                    const color = parseFloat(change) >= 0 ? '#4CAF50' : '#F44336';
+                // Try AlphaVantage first
+                try {
+                    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${currentStockSymbol}&apikey=${CONFIG.STOCK_API_KEY}`;
+                    const data = await fetchWithRetry(url);
+                    console.log('AlphaVantage response:', data);
+                    
+                    const quote = data["Global Quote"];
+                    
+                    if (quote && quote["05. price"]) {
+                        const price = parseFloat(quote["05. price"]).toFixed(2);
+                        const change = parseFloat(quote["09. change"] || 0).toFixed(2);
+                        const changePct = parseFloat(quote["10. change percent"]?.replace('%', '') || 0).toFixed(2);
+                        const color = parseFloat(change) >= 0 ? '#4CAF50' : '#F44336';
+                        
+                        elements.stockData.html(`
+                            ${currentStockSymbol}: $${price} 
+                            <span style="color:${color}">(${parseFloat(change) >= 0 ? '+' : ''}${change})</span>
+                        `);
+                        return;
+                    }
+                } catch (avError) {
+                    console.log('AlphaVantage failed, trying Yahoo Finance fallback...', avError);
+                }
+                
+                // Fallback to Yahoo Finance
+                const yahooUrl = `${CONFIG.CORS_PROXY}https://query1.finance.yahoo.com/v8/finance/chart/${currentStockSymbol}`;
+                const yahooResponse = await fetch(yahooUrl);
+                const yahooData = await yahooResponse.json();
+                console.log('Yahoo Finance response:', yahooData);
+                
+                const result = yahooData.chart?.result?.[0];
+                
+                if (result && result.meta && result.meta.regularMarketPrice) {
+                    const price = result.meta.regularMarketPrice;
+                    const prevClose = result.meta.chartPreviousClose || result.meta.previousClose || price;
+                    const change = price - prevClose;
+                    const changePct = ((price / prevClose - 1) * 100);
+                    const color = change >= 0 ? '#4CAF50' : '#F44336';
                     
                     elements.stockData.html(`
-                        ${currentStockSymbol}: $${price} 
-                        <span style="color:${color}">(${change >= 0 ? '+' : ''}${change})</span>
+                        ${currentStockSymbol}: $${price.toFixed(2)} 
+                        <span style="color:${color}">(${change >= 0 ? '+' : ''}${change.toFixed(2)})</span>
+                        <small style="opacity:0.7"> Yahoo</small>
                     `);
+                } else {
+                    throw new Error('No valid data from Yahoo Finance');
                 }
+                
             } catch (error) {
-                console.error('Stock fetch failed:', error);
-                elements.stockData.html(`${currentStockSymbol}: Unavailable`);
+                console.error('❌ Stock fetch completely failed:', error);
+                elements.stockData.html(`${currentStockSymbol}: <span style="color:#ff6b6b;">Unavailable</span>`);
+                
+                // Retry after delay
+                setTimeout(fetchStockData, 30000);
             }
         }
 
@@ -1119,7 +1157,21 @@
             $('#dew-toggle').click(giveMountainDew);
             
             // Games
-            $('#tetris-toggle').click(() => $('#tetris-wrapper').toggleClass('tetris-active'));
+            $('#tetris-toggle').click(() => {
+                const wrapper = $('#tetris-wrapper');
+                wrapper.toggleClass('tetris-active');
+                
+                if (wrapper.hasClass('tetris-active')) {
+                    tetris.start();
+                } else {
+                    tetris.stop();
+                }
+            });
+            
+            $('#tetris-close-btn').click(() => {
+                $('#tetris-wrapper').removeClass('tetris-active');
+                tetris.stop();
+            });
             
             $('#wolf3d-gun-toggle').click(() => {
                 const wrapper = $('#wolf3d-wrapper');
@@ -1163,6 +1215,241 @@
             // Emergency stop
             $('#stop-button').click(stopEmergency);
         }
+
+        // Tetris Game Implementation
+        const tetris = {
+            canvas: null,
+            ctx: null,
+            grid: [],
+            currentPiece: null,
+            currentX: 0,
+            currentY: 0,
+            score: 0,
+            gameLoop: null,
+            dropCounter: 0,
+            dropInterval: 1000,
+            lastTime: 0,
+            
+            COLS: 10,
+            ROWS: 20,
+            BLOCK_SIZE: 30,
+            
+            SHAPES: [
+                [[1,1,1,1]], // I
+                [[1,1],[1,1]], // O
+                [[0,1,0],[1,1,1]], // T
+                [[1,0,0],[1,1,1]], // L
+                [[0,0,1],[1,1,1]], // J
+                [[0,1,1],[1,1,0]], // S
+                [[1,1,0],[0,1,1]]  // Z
+            ],
+            
+            COLORS: ['#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'],
+            
+            init() {
+                this.canvas = document.getElementById('tetris-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.grid = Array(this.ROWS).fill(null).map(() => Array(this.COLS).fill(0));
+                this.score = 0;
+                this.spawnPiece();
+                this.lastTime = 0;
+                this.dropCounter = 0;
+            },
+            
+            spawnPiece() {
+                const shapeIndex = Math.floor(Math.random() * this.SHAPES.length);
+                this.currentPiece = {
+                    shape: this.SHAPES[shapeIndex],
+                    color: this.COLORS[shapeIndex]
+                };
+                this.currentX = Math.floor(this.COLS / 2) - Math.floor(this.currentPiece.shape[0].length / 2);
+                this.currentY = 0;
+                
+                if (this.collision()) {
+                    this.gameOver();
+                }
+            },
+            
+            collision() {
+                const shape = this.currentPiece.shape;
+                for (let y = 0; y < shape.length; y++) {
+                    for (let x = 0; x < shape[y].length; x++) {
+                        if (shape[y][x]) {
+                            const newX = this.currentX + x;
+                            const newY = this.currentY + y;
+                            
+                            if (newX < 0 || newX >= this.COLS || newY >= this.ROWS) {
+                                return true;
+                            }
+                            if (newY >= 0 && this.grid[newY][newX]) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            },
+            
+            merge() {
+                const shape = this.currentPiece.shape;
+                for (let y = 0; y < shape.length; y++) {
+                    for (let x = 0; x < shape[y].length; x++) {
+                        if (shape[y][x]) {
+                            this.grid[this.currentY + y][this.currentX + x] = this.currentPiece.color;
+                        }
+                    }
+                }
+            },
+            
+            rotate() {
+                const shape = this.currentPiece.shape;
+                const rotated = shape[0].map((_, i) => shape.map(row => row[i]).reverse());
+                const previousShape = this.currentPiece.shape;
+                this.currentPiece.shape = rotated;
+                
+                if (this.collision()) {
+                    this.currentPiece.shape = previousShape;
+                }
+            },
+            
+            moveLeft() {
+                this.currentX--;
+                if (this.collision()) {
+                    this.currentX++;
+                }
+            },
+            
+            moveRight() {
+                this.currentX++;
+                if (this.collision()) {
+                    this.currentX--;
+                }
+            },
+            
+            moveDown() {
+                this.currentY++;
+                if (this.collision()) {
+                    this.currentY--;
+                    this.merge();
+                    this.clearLines();
+                    this.spawnPiece();
+                }
+                this.dropCounter = 0;
+            },
+            
+            drop() {
+                while (!this.collision()) {
+                    this.currentY++;
+                }
+                this.currentY--;
+                this.merge();
+                this.clearLines();
+                this.spawnPiece();
+            },
+            
+            clearLines() {
+                let linesCleared = 0;
+                for (let y = this.ROWS - 1; y >= 0; y--) {
+                    if (this.grid[y].every(cell => cell !== 0)) {
+                        this.grid.splice(y, 1);
+                        this.grid.unshift(Array(this.COLS).fill(0));
+                        linesCleared++;
+                        y++;
+                    }
+                }
+                this.score += linesCleared * 100;
+            },
+            
+            draw() {
+                this.ctx.fillStyle = '#000';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw grid
+                for (let y = 0; y < this.ROWS; y++) {
+                    for (let x = 0; x < this.COLS; x++) {
+                        if (this.grid[y][x]) {
+                            this.ctx.fillStyle = this.grid[y][x];
+                            this.ctx.fillRect(x * this.BLOCK_SIZE, y * this.BLOCK_SIZE, 
+                                            this.BLOCK_SIZE - 1, this.BLOCK_SIZE - 1);
+                        }
+                    }
+                }
+                
+                // Draw current piece
+                const shape = this.currentPiece.shape;
+                this.ctx.fillStyle = this.currentPiece.color;
+                for (let y = 0; y < shape.length; y++) {
+                    for (let x = 0; x < shape[y].length; x++) {
+                        if (shape[y][x]) {
+                            this.ctx.fillRect((this.currentX + x) * this.BLOCK_SIZE, 
+                                            (this.currentY + y) * this.BLOCK_SIZE,
+                                            this.BLOCK_SIZE - 1, this.BLOCK_SIZE - 1);
+                        }
+                    }
+                }
+                
+                // Draw score
+                this.ctx.fillStyle = '#FFF';
+                this.ctx.font = '20px Arial';
+                this.ctx.fillText(`Score: ${this.score}`, 10, 30);
+            },
+            
+            update(time = 0) {
+                const deltaTime = time - this.lastTime;
+                this.lastTime = time;
+                this.dropCounter += deltaTime;
+                
+                if (this.dropCounter > this.dropInterval) {
+                    this.moveDown();
+                }
+                
+                this.draw();
+                this.gameLoop = requestAnimationFrame((t) => this.update(t));
+            },
+            
+            start() {
+                this.init();
+                this.update();
+            },
+            
+            stop() {
+                if (this.gameLoop) {
+                    cancelAnimationFrame(this.gameLoop);
+                    this.gameLoop = null;
+                }
+            },
+            
+            gameOver() {
+                this.stop();
+                alert(`Game Over! Score: ${this.score}`);
+                this.start();
+            }
+        };
+        
+        // Tetris keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (!$('#tetris-wrapper').hasClass('tetris-active')) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    tetris.moveLeft();
+                    break;
+                case 'ArrowRight':
+                    tetris.moveRight();
+                    break;
+                case 'ArrowDown':
+                    tetris.moveDown();
+                    break;
+                case 'ArrowUp':
+                case 'x':
+                    tetris.rotate();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    tetris.drop();
+                    break;
+            }
+        });
 
         // Initialize
         function initializeApp() {
