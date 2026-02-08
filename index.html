@@ -1671,7 +1671,7 @@
 
     <!-- Ahahah Image (Nedry) -->
     <img id="ahahah-image" 
-         src="https://static.wikia.nocookie.net/jurassicpark/images/b/b3/Ahahahreal.gif/revision/latest?cb=20170722184515" 
+         src="https://media.giphy.com/media/3oEjI67Egb8G9jqs3m/giphy.gif" 
          style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;max-width:80%;max-height:80%;border-radius:10px;border:3px solid var(--neon-pink);box-shadow:0 0 50px var(--neon-pink);" 
          alt="Ah ah ah! You didn't say the magic word!">
 
@@ -1901,18 +1901,32 @@
         }
 
         function setupRadarMap() {
-            radarMap = L.map('radar-map', {
-                attributionControl: false,
-                zoomControl: false,
-                dragging: false
-            }).setView([radarCoordinates.lat, radarCoordinates.lng], 8);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(radarMap);
-            
-            // Mark as active and load data
-            radarActive = true;
-            $('#radar-container').addClass('active');
-            loadRadarData();
+            try {
+                console.log('Setting up radar map with coordinates:', radarCoordinates);
+                
+                if (!radarCoordinates.lat || !radarCoordinates.lng) {
+                    console.error('Invalid coordinates:', radarCoordinates);
+                    elements.radarTimestamp.text('ERROR: Invalid location');
+                    return;
+                }
+                
+                radarMap = L.map('radar-map', {
+                    attributionControl: false,
+                    zoomControl: false,
+                    dragging: false
+                }).setView([radarCoordinates.lat, radarCoordinates.lng], 8);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(radarMap);
+                
+                // Mark as active and load data
+                radarActive = true;
+                $('#radar-container').addClass('active');
+                loadRadarData();
+                console.log('✅ Radar initialized successfully');
+            } catch (error) {
+                console.error('❌ Radar setup failed:', error);
+                elements.radarTimestamp.text('RADAR INIT FAILED');
+            }
         }
 
         async function loadRadarData() {
@@ -1937,7 +1951,7 @@
         }
 
         function updateRadarLocation(lat, lon) {
-            radarCoordinates = { lat, lon };
+            radarCoordinates = { lat, lng: lon }; // Use 'lng' to match initial format
             if (radarMap) {
                 radarMap.setView([lat, lon], 8);
                 loadRadarData();
