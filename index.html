@@ -1228,9 +1228,11 @@
         <div id="debug-stocks">Stocks: Unknown</div>
     </div>
 
-    <!-- Ahahah Image -->
-    <img id="ahahah-image" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" 
-         style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;max-width:300px;border-radius:10px;" alt="Ahahah">
+    <!-- Ahahah Image (Nedry) -->
+    <img id="ahahah-image" 
+         src="https://static.wikia.nocookie.net/jurassicpark/images/b/b3/Ahahahreal.gif/revision/latest?cb=20170722184515" 
+         style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;max-width:80%;max-height:80%;border-radius:10px;border:3px solid var(--neon-pink);box-shadow:0 0 50px var(--neon-pink);" 
+         alt="Ah ah ah! You didn't say the magic word!">
 
     <script>
         // Configuration
@@ -1780,12 +1782,13 @@
             });
             
             // Ahahah
+            // Ahahah (Nedry)
             $('#ahahah-button').click(() => {
                 const img = $('#ahahah-image');
-                const audio = new Audio('sounds/ahahah.mp3');
-                audio.play().catch(() => {});
+                const audio = new Audio('ahahah.mp3'); // Audio file in same directory
+                audio.play().catch(err => console.log('Audio play blocked:', err));
                 img.show();
-                setTimeout(() => img.hide(), 3000);
+                setTimeout(() => img.hide(), 5000); // Show for 5 seconds
             });
             
             // Debug
