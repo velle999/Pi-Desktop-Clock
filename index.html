@@ -239,8 +239,10 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: holographic 3s ease infinite, neon-pulse 2s ease-in-out infinite;
+            animation: holographic 3s ease infinite;
             filter: drop-shadow(0 0 20px var(--neon-cyan));
+            min-height: 56px;
+            display: inline-block;
         }
 
         .date-display {
@@ -982,6 +984,36 @@
             font-weight: bold;
         }
 
+        /* CNBC Live Stream Player */
+        #cnbcPlayer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 640px;
+            height: 400px;
+            z-index: 10003;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 110, 0.9),
+                inset 0 0 30px rgba(0, 245, 255, 0.3);
+            border: 3px solid var(--neon-pink);
+            background: #000;
+        }
+
+        #cnbcIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #cnbcStopButton {
+            z-index: 10004;
+        }
+
         /* Debug Panel - Adjusted for Portrait */
         #debug-panel {
             position: fixed;
@@ -1115,6 +1147,7 @@
         <button class="control-btn" id="spotifyPlayButton" title="Music">🎵</button>
         <button class="control-btn" id="treat-toggle" title="Give Treat">🦴</button>
         <button class="control-btn" id="dew-toggle" title="Mountain Dew">🥤</button>
+        <button class="control-btn" id="cnbc-toggle" title="CNBC Live">📺</button>
         <button class="control-btn" id="ahahah-button" title="Ahahah">😂</button>
     </div>
 
@@ -1177,6 +1210,12 @@
     <div id="spotifyPlayer">
         <iframe id="spotifyIframe" allow="encrypted-media" src=""></iframe>
         <button id="spotifyStopButton" class="control-btn" style="position:absolute;top:5px;right:5px;">✕</button>
+    </div>
+
+    <!-- CNBC Live Stream -->
+    <div id="cnbcPlayer" style="display:none;">
+        <iframe id="cnbcIframe" src="" allow="autoplay; fullscreen"></iframe>
+        <button id="cnbcStopButton" class="control-btn" style="position:absolute;top:5px;right:5px;">✕</button>
     </div>
 
     <!-- Debug Panel -->
@@ -1631,8 +1670,15 @@
             $('#radar-toggle').click(() => {
                 radarActive = !radarActive;
                 $('#radar-container').toggleClass('active', radarActive);
-                if (radarActive && !radarMap) initRadar();
-                if (radarActive) loadRadarData();
+                
+                if (radarActive) {
+                    if (!radarMap) {
+                        // Initialize radar if not yet created
+                        initRadar();
+                    } else {
+                        loadRadarData();
+                    }
+                }
             });
             
             // Stocks Toggle
@@ -1709,6 +1755,27 @@
             $('#spotifyStopButton').click(() => {
                 $('#spotifyPlayer').hide();
                 $('#spotifyIframe').attr('src', '');
+            });
+
+            // CNBC Live Stream
+            $('#cnbc-toggle').click(() => {
+                const player = $('#cnbcPlayer');
+                const iframe = $('#cnbcIframe');
+                
+                if (player.is(':visible')) {
+                    player.hide();
+                    iframe.attr('src', '');
+                } else {
+                    player.show();
+                    if (!iframe.attr('src')) {
+                        iframe.attr('src', 'https://livenewschat.eu/cnbc-live-stream/');
+                    }
+                }
+            });
+            
+            $('#cnbcStopButton').click(() => {
+                $('#cnbcPlayer').hide();
+                $('#cnbcIframe').attr('src', '');
             });
             
             // Ahahah
@@ -1971,6 +2038,7 @@
             fetchStockData();
             fetchBitcoinPrice();
             fetchWeatherAlerts();
+            initRadar(); // Initialize radar on startup
             setupUIControls();
             
             // Auto-refresh intervals
