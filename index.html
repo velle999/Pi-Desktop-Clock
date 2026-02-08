@@ -386,30 +386,38 @@
             font-weight: 500;
         }
 
-        /* Financial Section - Larger */
+        /* Financial Section - ENLARGED */
         .financial-section {
-            padding: 15px 20px;
+            padding: 20px 20px;
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(191, 0, 255, 0.3);
             flex-shrink: 0;
-            border-left: 3px solid var(--neon-green);
-            box-shadow: inset 0 0 20px rgba(57, 255, 20, 0.1);
+            border-left: 4px solid var(--neon-green);
+            box-shadow: inset 0 0 30px rgba(57, 255, 20, 0.15);
         }
 
         .financial-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-            line-height: 1.4;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 20px;
+            line-height: 1.3;
             font-family: 'Orbitron', monospace;
             color: var(--neon-green);
-            text-shadow: 0 0 5px var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+            font-weight: 700;
         }
 
         .financial-row:last-child {
             margin-bottom: 0;
+        }
+
+        /* Make individual price numbers stand out more */
+        #btcprice, #stockData {
+            font-size: 20px;
+            letter-spacing: 1px;
         }
 
         /* Radar Map - Cyberpunk Aesthetic */
@@ -1451,8 +1459,7 @@
 
         // Radar
         function initRadar() {
-            radarActive = true; // Start active
-            $('#radar-container').addClass('active');
+            // Don't set active by default - only when user clicks
             
             const leafletScript = document.createElement('script');
             leafletScript.src = 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js';
@@ -1468,6 +1475,10 @@
             }).setView([radarCoordinates.lat, radarCoordinates.lng], 8);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(radarMap);
+            
+            // Mark as active and load data
+            radarActive = true;
+            $('#radar-container').addClass('active');
             loadRadarData();
         }
 
@@ -1679,6 +1690,7 @@
                         // Initialize radar if not yet created
                         initRadar();
                     } else {
+                        // Just reload data if already initialized
                         loadRadarData();
                     }
                 }
@@ -2042,7 +2054,7 @@
             fetchStockData();
             fetchBitcoinPrice();
             fetchWeatherAlerts();
-            initRadar(); // Initialize radar on startup
+            // Removed initRadar() - radar now loads only on click
             setupUIControls();
             
             // Auto-refresh intervals
@@ -2051,7 +2063,9 @@
             setInterval(fetchStockData, 65000); // ~1 min
             setInterval(fetchBitcoinPrice, 60000);
             setInterval(fetchWeatherAlerts, 900000); // 15 min
-            setInterval(loadRadarData, 300000); // 5 min - radar refresh
+            setInterval(() => {
+                if (radarActive && radarMap) loadRadarData();
+            }, 300000); // 5 min - radar refresh (only if active)
         }
 
         $(document).ready(initializeApp);
