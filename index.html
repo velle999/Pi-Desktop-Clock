@@ -708,51 +708,425 @@
             box-shadow: 0 0 40px var(--neon-yellow);
         }
 
-        /* Animal Companions - Adjusted for larger controls */
+        /* ===== FOX COMPANION ===== */
         #animal-companion {
             position: fixed;
             bottom: 65px;
-            left: 20px;
-            font-size: 32px;
+            left: 0;
+            cursor: pointer;
             animation: roam 20s linear infinite alternate;
+            transform-origin: center;
+            filter: drop-shadow(0 3px 6px rgba(255, 0, 110, 0.8));
             z-index: 98;
-            transition: transform 0.3s;
-            filter: drop-shadow(0 0 10px var(--neon-pink));
+            pointer-events: auto;
         }
 
+        .animal-body {
+            width: 100px;
+            height: 70px;
+            background-color: #ff6b35;
+            border-radius: 50% 50% 40% 40% / 60% 60% 30% 30%;
+            position: relative;
+            animation: walk 0.8s ease-in-out infinite, float 4s ease-in-out infinite;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+            overflow: visible;
+        }
+
+        .animal-face {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background-color: #f7c59f;
+            border-radius: 50%;
+            top: 15px;
+            left: 20px;
+        }
+
+        .animal-face::before,
+        .animal-face::after {
+            content: '';
+            position: absolute;
+            background-color: #333;
+            border-radius: 50%;
+            width: 6px;
+            height: 6px;
+            top: 10px;
+            animation: blink 3s infinite;
+        }
+
+        .animal-face::before { left: 8px; }
+        .animal-face::after { right: 8px; }
+
+        .animal-legs {
+            position: absolute;
+            bottom: -5px;
+            width: 100%;
+            height: 10px;
+        }
+
+        .animal-leg {
+            position: absolute;
+            width: 8px;
+            height: 15px;
+            background-color: #e05a2b;
+            border-radius: 5px;
+            animation: legMove 0.5s infinite;
+        }
+
+        .animal-leg:nth-child(1) { left: 15px; }
+        .animal-leg:nth-child(2) { left: 25px; animation-delay: 0.25s; }
+        .animal-leg:nth-child(3) { right: 25px; }
+        .animal-leg:nth-child(4) { right: 15px; animation-delay: 0.25s; }
+
+        @keyframes legMove {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(10deg); }
+        }
+
+        @keyframes walk {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { opacity: 1; }
+            92%, 98% { opacity: 0; }
+        }
+
+        .animal-tail {
+            position: absolute;
+            width: 40px;
+            height: 25px;
+            background-color: #e05a2b;
+            border-radius: 50%;
+            right: -20px;
+            top: 15px;
+            transform-origin: left center;
+            animation: wag 3s ease-in-out infinite;
+        }
+
+        @keyframes wag {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        .animal-ear {
+            position: absolute;
+            width: 20px;
+            height: 25px;
+            background-color: #ff6b35;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            top: -10px;
+        }
+
+        .left-ear { left: 15px; transform: rotate(-15deg); }
+        .right-ear { right: 15px; transform: rotate(15deg); }
+
+        .animal-nose {
+            position: absolute;
+            width: 8px;
+            height: 6px;
+            background-color: #333;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .animal-message {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: var(--neon-cyan);
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            width: 150px;
+            text-align: center;
+            box-shadow: 0 0 20px var(--neon-cyan);
+            z-index: 31;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        #animal-companion:hover .animal-message {
+            opacity: 1;
+        }
+
+        .fox-dash {
+            animation: fox-dash 3s ease-in-out forwards;
+        }
+
+        @keyframes fox-dash {
+            0% { transform: translateX(0) scaleX(1); }
+            20% { transform: translateX(20vw) scaleX(1) translateY(-20px); }
+            50% { transform: translateX(70vw) scaleX(-1) translateY(0); }
+            70% { transform: translateX(40vw) scaleX(-1) translateY(10px); }
+            100% { transform: translateX(100vw) scaleX(1) translateY(0); }
+        }
+
+        /* ===== BUNNY COMPANION ===== */
+        #bunny-companion {
+            position: fixed;
+            bottom: 65px;
+            left: 150px;
+            animation: bunny-roam 18s linear infinite alternate;
+            transform-origin: center;
+            filter: drop-shadow(0 2px 4px rgba(57, 255, 20, 0.8));
+            pointer-events: auto;
+            z-index: 98;
+            cursor: pointer;
+        }
+
+        .bunny-body {
+            width: 80px;
+            height: 100px;
+            background-color: #f0f0f0;
+            border-radius: 50% 50% 40% 40% / 60% 60% 30% 30%;
+            position: relative;
+            animation: bunny-hop 0.8s ease-in-out infinite, bunny-float 4s ease-in-out infinite;
+        }
+
+        @keyframes bunny-hop {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes bunny-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .bunny-ears {
+            position: absolute;
+            width: 100%;
+            height: 60px;
+            top: -40px;
+        }
+
+        .bunny-ear {
+            width: 20px;
+            height: 50px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            position: absolute;
+            transform-origin: bottom center;
+        }
+
+        .bunny-ear.left {
+            left: 15px;
+            animation: ear-twitch-left 3s ease-in-out infinite;
+        }
+
+        .bunny-ear.right {
+            right: 15px;
+            animation: ear-twitch-right 3s ease-in-out infinite;
+        }
+
+        @keyframes ear-twitch-left {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes ear-twitch-right {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        .bunny-face {
+            position: absolute;
+            width: 50px;
+            height: 40px;
+            background-color: #fff;
+            border-radius: 40%;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .bunny-eyes {
+            display: flex;
+            justify-content: space-around;
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .bunny-eye {
+            width: 10px;
+            height: 10px;
+            background: #6b4f40;
+            border-radius: 50%;
+            position: relative;
+            animation: blink 4s infinite;
+        }
+
+        .bunny-nose {
+            position: absolute;
+            width: 8px;
+            height: 6px;
+            background-color: #ff9999;
+            border-radius: 40%;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .bunny-message {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--neon-green);
+            color: #000;
+            padding: 6px 10px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 0 20px var(--neon-green);
+            white-space: nowrap;
+        }
+
+        #bunny-companion:hover .bunny-message {
+            opacity: 1;
+        }
+
+        /* ===== DOG COMPANION ===== */
         #dog-companion {
             position: fixed;
             bottom: 65px;
-            right: 20px;
-            font-size: 32px;
+            right: 0;
             animation: dog-roam 24s linear infinite alternate;
+            transform-origin: center;
+            filter: drop-shadow(0 3px 6px rgba(0, 245, 255, 0.8));
             z-index: 98;
-            filter: drop-shadow(0 0 10px var(--neon-cyan));
+            pointer-events: auto;
+            cursor: pointer;
         }
 
+        .dog-body {
+            width: 80px;
+            height: 70px;
+            background-color: #8B4513;
+            border-radius: 50%;
+            position: relative;
+            animation: dog-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes dog-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .dog-face {
+            position: absolute;
+            width: 50px;
+            height: 35px;
+            background: #D2691E;
+            border-radius: 50%;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dog-ears {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            top: -5px;
+        }
+
+        .dog-ear {
+            width: 18px;
+            height: 25px;
+            background: #654321;
+            border-radius: 50%;
+            position: absolute;
+            animation: ear-flop 3s ease-in-out infinite;
+        }
+
+        .dog-ear.left { left: 5px; transform: rotate(-20deg); }
+        .dog-ear.right { right: 5px; transform: rotate(20deg); }
+
+        @keyframes ear-flop {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(-25deg); }
+        }
+
+        .dog-eyes {
+            position: absolute;
+            width: 100%;
+            top: 10px;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 12px;
+        }
+
+        .dog-eye {
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            animation: blink 4s infinite;
+        }
+
+        .dog-nose {
+            position: absolute;
+            width: 10px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dog-message {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--neon-pink);
+            color: #000;
+            padding: 6px 10px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 0 20px var(--neon-pink);
+            white-space: nowrap;
+        }
+
+        #dog-companion:hover .dog-message {
+            opacity: 1;
+        }
+
+        /* Companion Animations */
         @keyframes roam {
-            0% { left: 20px; }
-            100% { left: calc(50% - 80px); }
+            0% { left: 0; }
+            100% { left: calc(40% - 100px); }
+        }
+
+        @keyframes bunny-roam {
+            0% { left: 150px; }
+            100% { left: calc(50% - 50px); }
         }
 
         @keyframes dog-roam {
-            0% { right: 20px; }
-            100% { right: calc(50% - 80px); }
-        }
-
-        .fox-happy { 
-            animation: bounce 0.5s ease 4 !important; 
-            filter: drop-shadow(0 0 20px var(--neon-pink)) drop-shadow(0 0 40px var(--neon-yellow));
-        }
-        
-        .dog-happy { 
-            animation: bounce 0.5s ease 4 !important; 
-            filter: drop-shadow(0 0 20px var(--neon-cyan)) drop-shadow(0 0 40px var(--neon-green));
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            0% { right: 0; }
+            100% { right: calc(40% - 100px); }
         }
 
         /* Carrot Rain */
@@ -1171,8 +1545,57 @@
     </div>
 
     <!-- Companions -->
-    <div id="animal-companion">🦊</div>
-    <div id="dog-companion">🐕</div>
+    <div id="animal-companion">
+        <div class="animal-body">
+            <div class="animal-ear left-ear"></div>
+            <div class="animal-ear right-ear"></div>
+            <div class="animal-face">
+                <div class="animal-nose"></div>
+            </div>
+            <div class="animal-tail"></div>
+            <div class="animal-legs">
+                <div class="animal-leg"></div>
+                <div class="animal-leg"></div>
+                <div class="animal-leg"></div>
+                <div class="animal-leg"></div>
+            </div>
+        </div>
+        <div class="animal-message">🦊 Mountain Dew?</div>
+    </div>
+
+    <div id="bunny-companion">
+        <div class="bunny-body">
+            <div class="bunny-ears">
+                <div class="bunny-ear left"></div>
+                <div class="bunny-ear right"></div>
+            </div>
+            <div class="bunny-face">
+                <div class="bunny-eyes">
+                    <div class="bunny-eye"></div>
+                    <div class="bunny-eye"></div>
+                </div>
+                <div class="bunny-nose"></div>
+            </div>
+        </div>
+        <div class="bunny-message">🥕 Carrot time!</div>
+    </div>
+
+    <div id="dog-companion">
+        <div class="dog-body">
+            <div class="dog-ears">
+                <div class="dog-ear left"></div>
+                <div class="dog-ear right"></div>
+            </div>
+            <div class="dog-face">
+                <div class="dog-eyes">
+                    <div class="dog-eye"></div>
+                    <div class="dog-eye"></div>
+                </div>
+                <div class="dog-nose"></div>
+            </div>
+        </div>
+        <div class="dog-message">🦴 Woof! Treat please!</div>
+    </div>
 
     <!-- Emergency -->
     <div id="emergency-overlay">
