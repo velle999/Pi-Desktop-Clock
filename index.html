@@ -179,7 +179,7 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding-bottom: 60px;
+            padding-bottom: 75px;
             scrollbar-width: thin;
             scrollbar-color: var(--neon-pink) transparent;
         }
@@ -204,11 +204,12 @@
                 rgba(191, 0, 255, 0.3) 0%, 
                 rgba(0, 245, 255, 0.2) 100%);
             backdrop-filter: blur(20px);
-            padding: 50px 15px 20px;
+            padding: 60px 15px 25px;
             text-align: center;
             position: relative;
             border-bottom: 2px solid var(--neon-purple);
             box-shadow: 0 5px 30px rgba(191, 0, 255, 0.5);
+            flex-shrink: 0;
         }
 
         .time-header::before {
@@ -227,7 +228,7 @@
 
         .time-display {
             font-family: 'Orbitron', monospace;
-            font-size: 56px;
+            font-size: 68px;
             font-weight: 900;
             letter-spacing: 4px;
             line-height: 1;
@@ -241,14 +242,14 @@
             -webkit-text-fill-color: transparent;
             animation: holographic 3s ease infinite;
             filter: drop-shadow(0 0 20px var(--neon-cyan));
-            min-height: 56px;
+            min-height: 68px;
             display: inline-block;
         }
 
         .date-display {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 16px;
-            margin-top: 8px;
+            font-size: 18px;
+            margin-top: 10px;
             color: var(--neon-green);
             text-transform: uppercase;
             letter-spacing: 3px;
@@ -261,8 +262,8 @@
             position: absolute;
             top: 8px;
             display: grid;
-            grid-template-columns: repeat(2, 30px);
-            gap: 5px;
+            grid-template-columns: repeat(2, 34px);
+            gap: 6px;
         }
 
         .controls.left { left: 8px; }
@@ -272,10 +273,10 @@
             background: rgba(0, 0, 0, 0.5);
             border: 2px solid var(--neon-cyan);
             border-radius: 5px;
-            width: 30px;
-            height: 30px;
+            width: 34px;
+            height: 34px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             transition: all 0.3s;
             display: flex;
             align-items: center;
@@ -315,16 +316,16 @@
             animation: glitch 0.3s;
         }
 
-        /* Weather Section - Compact */
+        /* Weather Section - Larger */
         .weather-section {
-            padding: 12px 15px;
+            padding: 18px 20px;
             background: linear-gradient(135deg, 
                 rgba(255, 0, 110, 0.1) 0%, 
                 rgba(0, 245, 255, 0.1) 100%);
             backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             flex-shrink: 0;
             border-bottom: 1px solid rgba(0, 245, 255, 0.3);
             position: relative;
@@ -346,7 +347,7 @@
         }
 
         .weather-icon { 
-            font-size: 36px;
+            font-size: 52px;
             flex-shrink: 0;
             filter: drop-shadow(0 0 10px var(--neon-yellow));
             animation: float 3s ease-in-out infinite;
@@ -361,7 +362,7 @@
 
         .current-temp {
             font-family: 'Orbitron', monospace;
-            font-size: 28px;
+            font-size: 36px;
             font-weight: 700;
             background: linear-gradient(90deg, 
                 var(--neon-yellow), 
@@ -374,9 +375,9 @@
         }
 
         .weather-desc {
-            font-size: 13px;
+            font-size: 15px;
             color: var(--neon-cyan);
-            margin-top: 3px;
+            margin-top: 5px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -385,9 +386,9 @@
             font-weight: 500;
         }
 
-        /* Financial Section - Compact */
+        /* Financial Section - Larger */
         .financial-section {
-            padding: 10px 15px;
+            padding: 15px 20px;
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(191, 0, 255, 0.3);
@@ -399,9 +400,9 @@
         .financial-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 12px;
-            line-height: 1.3;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.4;
             font-family: 'Orbitron', monospace;
             color: var(--neon-green);
             text-shadow: 0 0 5px var(--neon-green);
@@ -426,7 +427,7 @@
         }
 
         #radar-container.active {
-            height: 220px;
+            height: 260px;
             animation: glitch 0.3s;
         }
 
@@ -510,11 +511,11 @@
             to { transform: translate(-50%, 0) rotate(360deg); }
         }
 
-        /* Forecast - Compact */
+        /* Forecast - Larger */
         #five-day-forecast {
-            padding: 10px;
+            padding: 15px 12px;
             display: flex;
-            gap: 6px;
+            gap: 8px;
             overflow-x: auto;
             flex-shrink: 0;
             scrollbar-width: none;
@@ -527,11 +528,11 @@
 
         .forecast-day {
             text-align: center;
-            min-width: 65px;
+            min-width: 75px;
             background: linear-gradient(135deg, 
                 rgba(191, 0, 255, 0.2), 
                 rgba(0, 245, 255, 0.2));
-            padding: 8px 6px;
+            padding: 10px 8px;
             border-radius: 8px;
             border: 1px solid var(--neon-purple);
             box-shadow: 0 0 15px rgba(191, 0, 255, 0.3);
@@ -545,22 +546,22 @@
         }
 
         .forecast-icon img {
-            width: 35px;
-            height: 35px;
+            width: 42px;
+            height: 42px;
             filter: drop-shadow(0 0 5px var(--neon-cyan));
         }
 
         .forecast-text {
-            font-size: 11px;
-            margin-top: 3px;
+            font-size: 13px;
+            margin-top: 5px;
             color: var(--neon-cyan);
             font-weight: 600;
         }
 
-        /* News Ticker - Compact */
+        /* News Ticker - Larger */
         #news-ticker {
             background: rgba(0, 0, 0, 0.6);
-            padding: 6px 0;
+            padding: 10px 0;
             overflow: hidden;
             display: none;
             flex-shrink: 0;
@@ -574,7 +575,7 @@
         #news-items {
             white-space: nowrap;
             animation: scrollNews 60s linear infinite;
-            font-size: 11px;
+            font-size: 13px;
             color: var(--neon-pink);
             font-weight: 600;
             text-transform: uppercase;
@@ -586,17 +587,17 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* Weather Alerts - Compact */
+        /* Weather Alerts - Larger */
         #weatherAlerts {
-            padding: 6px 12px;
-            font-size: 10px;
-            max-height: 70px;
+            padding: 10px 15px;
+            font-size: 12px;
+            max-height: 100px;
             overflow-y: auto;
             flex-shrink: 0;
         }
 
         #weatherAlerts::-webkit-scrollbar {
-            width: 3px;
+            width: 4px;
         }
 
         #weatherAlerts::-webkit-scrollbar-thumb {
@@ -606,8 +607,8 @@
         }
 
         .alert {
-            padding: 6px;
-            margin: 4px 0;
+            padding: 8px;
+            margin: 5px 0;
             border-radius: 4px;
             background: linear-gradient(135deg, 
                 rgba(255, 0, 110, 0.3), 
@@ -689,12 +690,12 @@
             box-shadow: 0 0 40px var(--neon-yellow);
         }
 
-        /* Animal Companions - Smaller for Portrait */
+        /* Animal Companions - Adjusted for larger controls */
         #animal-companion {
             position: fixed;
-            bottom: 55px;
+            bottom: 65px;
             left: 20px;
-            font-size: 28px;
+            font-size: 32px;
             animation: roam 20s linear infinite alternate;
             z-index: 98;
             transition: transform 0.3s;
@@ -703,9 +704,9 @@
 
         #dog-companion {
             position: fixed;
-            bottom: 55px;
+            bottom: 65px;
             right: 20px;
-            font-size: 28px;
+            font-size: 32px;
             animation: dog-roam 24s linear infinite alternate;
             z-index: 98;
             filter: drop-shadow(0 0 10px var(--neon-cyan));
@@ -1037,22 +1038,22 @@
             text-shadow: 0 0 5px var(--neon-pink);
         }
 
-        /* Bottom Controls - Compact Grid for Portrait */
+        /* Bottom Controls - Larger Grid for Portrait */
         .bottom-controls {
             position: fixed;
-            bottom: 8px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             display: grid;
-            grid-template-columns: repeat(4, 36px);
-            gap: 6px;
+            grid-template-columns: repeat(4, 42px);
+            gap: 8px;
             z-index: 99;
         }
 
         .bottom-controls .control-btn {
-            width: 36px;
-            height: 36px;
-            font-size: 16px;
+            width: 42px;
+            height: 42px;
+            font-size: 18px;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             border: 2px solid var(--neon-cyan);
