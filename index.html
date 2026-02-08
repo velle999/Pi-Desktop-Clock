@@ -1346,6 +1346,142 @@
             display: none;
         }
 
+        /* ===== 1. CRT SCAN LINES & EFFECTS ===== */
+        .crt-scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99997;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            animation: scanline-move 8s linear infinite;
+        }
+
+        @keyframes scanline-move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        /* CRT Flicker */
+        .crt-flicker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99996;
+            background: rgba(255, 255, 255, 0.02);
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.95; }
+            50% { opacity: 1; }
+            100% { opacity: 0.98; }
+        }
+
+        /* Chromatic Aberration on Clock */
+        .time-display {
+            font-family: 'Orbitron', monospace;
+            font-size: 68px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            line-height: 1;
+            background: linear-gradient(45deg, 
+                var(--neon-cyan), 
+                var(--neon-pink), 
+                var(--neon-yellow));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: holographic 3s ease infinite;
+            filter: drop-shadow(0 0 20px var(--neon-cyan));
+            min-height: 68px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .time-display::before,
+        .time-display::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-display::before {
+            animation: glitch-anim-1 2.5s infinite;
+            color: var(--neon-pink);
+            z-index: -1;
+        }
+
+        .time-display::after {
+            animation: glitch-anim-2 3s infinite;
+            color: var(--neon-cyan);
+            z-index: -2;
+        }
+
+        @keyframes glitch-anim-1 {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            33% { transform: translate(-2px, 0); }
+            66% { transform: translate(2px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            33% { transform: translate(2px, 0); }
+            66% { transform: translate(-2px, 0); }
+        }
+
+        /* VHS Edge Distortion */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--neon-pink) 0%, 
+                var(--neon-cyan) 50%, 
+                var(--neon-yellow) 100%);
+            opacity: 0.3;
+            filter: blur(1px);
+            z-index: 1;
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--neon-yellow) 0%, 
+                var(--neon-cyan) 50%, 
+                var(--neon-pink) 100%);
+            opacity: 0.3;
+            filter: blur(1px);
+            z-index: 1;
+        }
+
         /* ===== GLASS PANEL OVERLAY ===== */
         .glass-overlay-panel {
             position: absolute;
@@ -1412,6 +1548,130 @@
             }
         }
 
+        /* ===== 2. CYBERPUNK CORNER ACCENTS ===== */
+        .cyber-corners {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .cyber-corners::before,
+        .cyber-corners::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .cyber-corners::before {
+            top: -1px;
+            left: -1px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 3px 0 0 0;
+        }
+
+        .cyber-corners::after {
+            top: -1px;
+            right: -1px;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 3px 0 0;
+        }
+
+        .time-header .cyber-corners::before,
+        .time-header .cyber-corners::after {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink);
+            animation: corner-pulse 2s ease-in-out infinite;
+        }
+
+        .weather-section .cyber-corners::before,
+        .weather-section .cyber-corners::after {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .financial-section .cyber-corners::before,
+        .financial-section .cyber-corners::after {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        @keyframes corner-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Bottom corners */
+        .time-header::before,
+        .weather-section::before,
+        .financial-section::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: -1px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid;
+            border-top: none;
+            border-right: none;
+            border-radius: 0 0 0 3px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .time-header::before {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .weather-section::before {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .financial-section::before {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* Right bottom corner - using a span we'll add via JS */
+        .corner-br {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid;
+            border-top: none;
+            border-left: none;
+            border-radius: 0 0 3px 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .time-header .corner-br {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .weather-section .corner-br {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .financial-section .corner-br {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
         /* Apply glass panels to content sections */
         .time-header,
         .weather-section,
@@ -1419,6 +1679,71 @@
         #five-day-forecast,
         #radar-container.active {
             position: relative;
+        }
+
+        /* ===== 3. DATA STREAM PARTICLES ===== */
+        #data-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .data-particle {
+            position: absolute;
+            color: var(--neon-cyan);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            opacity: 0.6;
+            text-shadow: 0 0 5px var(--neon-cyan);
+            animation: particle-float linear infinite;
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--drift));
+                opacity: 0;
+            }
+        }
+
+        .data-particle:nth-child(odd) {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        .data-particle:nth-child(3n) {
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+
+        /* Binary stream background */
+        .binary-stream {
+            position: absolute;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: var(--neon-cyan);
+            opacity: 0.2;
+            white-space: nowrap;
+            animation: stream-flow 15s linear infinite;
+        }
+
+        @keyframes stream-flow {
+            0% { transform: translateY(100vh); }
+            100% { transform: translateY(-100%); }
         }
 
         .time-header::after,
@@ -1445,6 +1770,136 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
             pointer-events: none;
             z-index: 1;
+        }
+
+        /* ===== 4. HOLOGRAPHIC BORDERS ===== */
+        .time-header,
+        .weather-section,
+        .financial-section,
+        #radar-container.active {
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        /* Animated holographic border */
+        .time-header {
+            background-image: 
+                linear-gradient(var(--dark-bg), var(--dark-bg)),
+                linear-gradient(90deg, 
+                    var(--neon-pink) 0%,
+                    var(--neon-cyan) 25%,
+                    var(--neon-green) 50%,
+                    var(--neon-yellow) 75%,
+                    var(--neon-pink) 100%
+                );
+            background-origin: padding-box, border-box;
+            background-clip: padding-box, border-box;
+            animation: holo-rotate 6s linear infinite;
+            background-size: 100% 100%, 400% 100%;
+        }
+
+        .weather-section {
+            background-image: 
+                linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0)),
+                linear-gradient(90deg, 
+                    var(--neon-yellow) 0%,
+                    var(--neon-pink) 25%,
+                    var(--neon-cyan) 50%,
+                    var(--neon-green) 75%,
+                    var(--neon-yellow) 100%
+                );
+            background-origin: padding-box, border-box;
+            background-clip: padding-box, border-box;
+            animation: holo-rotate 7s linear infinite;
+            background-size: 100% 100%, 400% 100%;
+        }
+
+        .financial-section {
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                linear-gradient(90deg, 
+                    var(--neon-green) 0%,
+                    var(--neon-cyan) 25%,
+                    var(--neon-pink) 50%,
+                    var(--neon-yellow) 75%,
+                    var(--neon-green) 100%
+                );
+            background-origin: padding-box, border-box;
+            background-clip: padding-box, border-box;
+            animation: holo-rotate 8s linear infinite;
+            background-size: 100% 100%, 400% 100%;
+        }
+
+        @keyframes holo-rotate {
+            0% { background-position: 0% 0%, 0% 0%; }
+            100% { background-position: 0% 0%, 400% 0%; }
+        }
+
+        /* Holographic shimmer on forecast cards */
+        .forecast-day {
+            border: 2px solid transparent;
+            background-image: 
+                linear-gradient(rgba(191, 0, 255, 0.2), rgba(0, 245, 255, 0.2)),
+                linear-gradient(135deg, 
+                    var(--neon-purple) 0%,
+                    var(--neon-cyan) 50%,
+                    var(--neon-pink) 100%
+                );
+            background-origin: padding-box, border-box;
+            background-clip: padding-box, border-box;
+            position: relative;
+        }
+
+        .forecast-day::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg,
+                var(--neon-pink), 
+                var(--neon-cyan), 
+                var(--neon-yellow), 
+                var(--neon-green));
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .forecast-day:hover::before {
+            opacity: 0.6;
+            animation: holo-spin 2s linear infinite;
+        }
+
+        @keyframes holo-spin {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Iridescent effect on control buttons */
+        .control-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid transparent;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                linear-gradient(135deg, 
+                    var(--neon-cyan), 
+                    var(--neon-pink), 
+                    var(--neon-yellow));
+            background-origin: padding-box, border-box;
+            background-clip: padding-box, border-box;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
 
         /* Ensure content stays above glass overlay */
@@ -1624,6 +2079,13 @@
     <div id="weather-effects"></div>
     <div id="carrot-layer"></div>
     <canvas id="matrix-canvas"></canvas>
+
+    <!-- CRT Effects -->
+    <div class="crt-scanlines"></div>
+    <div class="crt-flicker"></div>
+
+    <!-- Data Particles -->
+    <div id="data-particles"></div>
 
     <div class="container">
         <!-- Time Header -->
@@ -2693,6 +3155,7 @@
             fetchWeatherAlerts();
             // Removed initRadar() - radar now loads only on click
             setupUIControls();
+            initVisualEffects(); // Add visual enhancements
             
             // Auto-refresh intervals
             setInterval(fetchWeather, 600000); // 10 min
@@ -2703,6 +3166,71 @@
             setInterval(() => {
                 if (radarActive && radarMap) loadRadarData();
             }, 300000); // 5 min - radar refresh (only if active)
+        }
+
+        // Initialize visual effects
+        function initVisualEffects() {
+            // Add corner accents
+            addCyberCorners();
+            
+            // Create data particles
+            createDataParticles();
+            
+            // Add time display data attribute for chromatic aberration
+            updateTimeDataAttr();
+        }
+
+        // Add cyberpunk corner brackets
+        function addCyberCorners() {
+            const sections = [
+                '.time-header',
+                '.weather-section', 
+                '.financial-section'
+            ];
+            
+            sections.forEach(selector => {
+                const section = $(selector);
+                if (section.length) {
+                    // Add top corners container
+                    section.prepend('<div class="cyber-corners"></div>');
+                    // Add bottom right corner
+                    section.append('<span class="corner-br"></span>');
+                }
+            });
+        }
+
+        // Create floating data particles
+        function createDataParticles() {
+            const container = $('#data-particles');
+            const particles = 30;
+            const chars = ['0', '1', '01', '10', '001', '101', '▓', '▒', '░', '█'];
+            
+            for (let i = 0; i < particles; i++) {
+                const particle = $('<div class="data-particle"></div>');
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                const duration = 15 + Math.random() * 15; // 15-30s
+                const delay = Math.random() * 10; // 0-10s
+                const leftPos = Math.random() * 100; // 0-100%
+                const drift = (Math.random() - 0.5) * 100; // -50 to 50px
+                
+                particle.text(char);
+                particle.css({
+                    left: leftPos + '%',
+                    '--drift': drift + 'px',
+                    animationDuration: duration + 's',
+                    animationDelay: delay + 's'
+                });
+                
+                container.append(particle);
+            }
+        }
+
+        // Update time data attribute for chromatic effect
+        function updateTimeDataAttr() {
+            setInterval(() => {
+                const timeText = $('.time-display').text();
+                $('.time-display').attr('data-text', timeText);
+            }, 1000);
         }
 
         $(document).ready(initializeApp);
