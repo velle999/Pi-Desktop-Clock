@@ -29,25 +29,6 @@ A feature-packed smart alarm clock for 480x800 touchscreens with weather radar, 
 
 ## 🚀 Quick Start
 
-### Deploy to GitHub Pages
-
-1. **Create Repository**
-   ```bash
-   # Create new repo on GitHub named 'smart-alarm-clock'
-   ```
-
-2. **Upload File**
-   - Upload `index.html` to your repository
-   - No other files needed!
-
-3. **Enable Pages**
-   - Go to Settings → Pages
-   - Source: `main` branch
-   - Save
-
-4. **Access**
-   - Visit: `https://YOUR-USERNAME.github.io/smart-alarm-clock/`
-
 ### Local Testing
 
 Simply open `index.html` in any modern browser!
