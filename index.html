@@ -1129,6 +1129,46 @@
             100% { right: calc(40% - 100px); }
         }
 
+        /* Treat Emoji Animation */
+        @keyframes floatTreat {
+            0% { 
+                opacity: 1; 
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-30px) scale(1.2);
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateX(-50%) translateY(-60px) scale(0.5);
+            }
+        }
+
+        .treat-emoji {
+            position: absolute;
+            font-size: 32px;
+            animation: floatTreat 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        /* Happy States */
+        .fox-happy .animal-body {
+            animation: bounce 0.3s ease 6, walk 0.8s ease-in-out infinite, float 4s ease-in-out infinite;
+        }
+
+        .bunny-happy .bunny-body {
+            animation: bounce 0.3s ease 6, bunny-hop 0.8s ease-in-out infinite, bunny-float 4s ease-in-out infinite;
+        }
+
+        .dog-happy .dog-body {
+            animation: bounce 0.3s ease 6, dog-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
+        }
+
         /* Carrot Rain */
         #carrot-layer {
             position: fixed;
@@ -1997,13 +2037,49 @@
         function giveDogTreat() {
             const dog = $('#dog-companion');
             dog.addClass('dog-happy');
+            showTreatEmoji(dog, '🦴');
             setTimeout(() => dog.removeClass('dog-happy'), 2000);
         }
 
         function giveMountainDew() {
             const fox = $('#animal-companion');
             fox.addClass('fox-happy');
+            showTreatEmoji(fox, '🥤');
             setTimeout(() => fox.removeClass('fox-happy'), 2000);
+        }
+
+        function giveBunnyCarrot() {
+            const bunny = $('#bunny-companion');
+            bunny.addClass('bunny-happy');
+            showTreatEmoji(bunny, '🥕');
+            setTimeout(() => bunny.removeClass('bunny-happy'), 2000);
+        }
+
+        function showTreatEmoji(companion, emoji) {
+            // Create floating treat emoji
+            const treat = $('<div class="treat-emoji"></div>');
+            treat.text(emoji);
+            treat.css({
+                position: 'absolute',
+                fontSize: '32px',
+                top: '-60px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                animation: 'floatTreat 2s ease-out forwards',
+                pointerEvents: 'none',
+                zIndex: 100,
+                filter: 'drop-shadow(0 0 10px var(--neon-yellow))'
+            });
+            
+            companion.append(treat);
+            setTimeout(() => treat.remove(), 2000);
+        }
+
+        function giveAllTreats() {
+            // Give treats to all companions at once!
+            giveDogTreat();
+            giveMountainDew();
+            giveBunnyCarrot();
         }
 
         // Carrot Rain
@@ -2172,7 +2248,8 @@
             });
             
             // Treats
-            $('#treat-toggle').click(giveDogTreat);
+            // Treats for companions
+            $('#treat-toggle').click(giveAllTreats);
             $('#dew-toggle').click(giveMountainDew);
             
             // Games
