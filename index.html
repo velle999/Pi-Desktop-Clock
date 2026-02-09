@@ -611,6 +611,280 @@
         .controls.left { left: 8px; }
         .controls.right { right: 8px; }
 
+        /* ===== ALARM CLOCK MODAL ===== */
+        #alarm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        #alarm-modal.active { display: flex; }
+
+        .alarm-modal-content {
+            background: linear-gradient(135deg, 
+                rgba(191, 0, 255, 0.2) 0%, 
+                rgba(0, 245, 255, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 380px;
+            border: 2px solid var(--neon-purple);
+            box-shadow: 
+                0 0 50px rgba(191, 0, 255, 0.5),
+                inset 0 0 50px rgba(0, 245, 255, 0.1);
+        }
+
+        .alarm-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+
+        .alarm-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .alarm-item:hover {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 110, 0.5);
+        }
+
+        .alarm-time {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        .alarm-label {
+            font-size: 12px;
+            color: var(--neon-green);
+            margin-top: 3px;
+        }
+
+        .alarm-toggle {
+            width: 50px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid var(--neon-cyan);
+        }
+
+        .alarm-toggle.active {
+            background: var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .alarm-toggle::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .alarm-toggle.active::after {
+            left: 26px;
+        }
+
+        .alarm-delete {
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .alarm-delete:hover {
+            background: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .alarm-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .alarm-input-group input[type="time"] {
+            flex: 2;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-purple);
+            border-radius: 5px;
+            padding: 10px;
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+        }
+
+        .alarm-input-group input[type="text"] {
+            flex: 3;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-purple);
+            border-radius: 5px;
+            padding: 10px;
+            color: var(--neon-cyan);
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .alarm-input-group input:focus {
+            outline: none;
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 110, 0.5);
+        }
+
+        /* Alarm Ringing Overlay */
+        #alarm-ringing {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100000;
+            justify-content: center;
+            align-items: center;
+            animation: alarm-pulse 1s ease-in-out infinite;
+        }
+
+        #alarm-ringing.active { display: flex; }
+
+        @keyframes alarm-pulse {
+            0%, 100% { 
+                background: rgba(0, 0, 0, 0.95); 
+            }
+            50% { 
+                background: rgba(191, 0, 255, 0.3); 
+            }
+        }
+
+        .alarm-ringing-content {
+            text-align: center;
+            animation: shake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .alarm-ringing-time {
+            font-family: 'Orbitron', monospace;
+            font-size: 72px;
+            color: var(--neon-pink);
+            text-shadow: 0 0 40px var(--neon-pink);
+            margin-bottom: 20px;
+            animation: neon-pulse 1s ease-in-out infinite;
+        }
+
+        .alarm-ringing-label {
+            font-size: 24px;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+            margin-bottom: 40px;
+        }
+
+        .alarm-snooze-btn,
+        .alarm-dismiss-btn {
+            font-family: 'Orbitron', monospace;
+            font-size: 18px;
+            padding: 15px 40px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .alarm-snooze-btn {
+            background: var(--neon-yellow);
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-yellow);
+        }
+
+        .alarm-snooze-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px var(--neon-yellow);
+        }
+
+        .alarm-dismiss-btn {
+            background: var(--neon-pink);
+            color: #fff;
+            box-shadow: 0 0 30px var(--neon-pink);
+        }
+
+        .alarm-dismiss-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px var(--neon-pink);
+        }
+
+        /* E-ink mode alarm styling */
+        body.night-mode #alarm-modal {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        body.night-mode .alarm-modal-content {
+            background: #000000 !important;
+            border: 3px solid #ffffff !important;
+        }
+
+        body.night-mode .alarm-item {
+            background: #000000 !important;
+            border: 2px solid #ffffff !important;
+        }
+
+        body.night-mode .alarm-time,
+        body.night-mode .alarm-label {
+            color: #ffffff !important;
+            text-shadow: none !important;
+        }
+
+        body.night-mode #alarm-ringing {
+            background: rgba(0, 0, 0, 0.98) !important;
+            animation: none !important;
+        }
+
+        body.night-mode .alarm-ringing-time,
+        body.night-mode .alarm-ringing-label {
+            color: #ffffff !important;
+            text-shadow: none !important;
+            animation: none !important;
+        }
+
         .control-btn {
             background: rgba(0, 0, 0, 0.5);
             border: 2px solid var(--neon-cyan);
@@ -2434,6 +2708,7 @@
         <div class="time-header">
             <div class="controls left">
                 <button class="control-btn" id="settings-button" title="Settings">⚙️</button>
+                <button class="control-btn" id="alarm-button" title="Alarms">⏰</button>
                 <button class="control-btn" id="night-toggle" title="Night Mode">☀️🌙</button>
                 <button class="control-btn" id="debug-toggle" title="Debug">🐞</button>
             </div>
@@ -2564,6 +2839,42 @@
     </div>
 
     <!-- Settings Modal -->
+    <!-- Alarm Modal -->
+    <div id="alarm-modal">
+        <div class="alarm-modal-content">
+            <div class="modal-header">⏰ Alarm Clock</div>
+            
+            <div class="alarm-input-group">
+                <input type="time" id="alarm-time-input" value="07:00">
+                <input type="text" id="alarm-label-input" placeholder="Wake up!" maxlength="30">
+            </div>
+            
+            <button class="btn btn-primary" id="add-alarm-btn" style="width:100%; margin-bottom:15px;">
+                ➕ Add Alarm
+            </button>
+            
+            <div class="alarm-list" id="alarm-list">
+                <!-- Alarms will be added here dynamically -->
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" id="close-alarm-modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alarm Ringing Overlay -->
+    <div id="alarm-ringing">
+        <div class="alarm-ringing-content">
+            <div class="alarm-ringing-time" id="alarm-ringing-time">07:00</div>
+            <div class="alarm-ringing-label" id="alarm-ringing-label">WAKE UP!</div>
+            <div>
+                <button class="alarm-snooze-btn" id="alarm-snooze">Snooze (5 min)</button>
+                <button class="alarm-dismiss-btn" id="alarm-dismiss">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="settingsModal">
         <div class="modal-content">
             <div class="modal-header">⚙️ Settings</div>
@@ -3520,6 +3831,9 @@
             
             // Add time display data attribute for chromatic aberration
             updateTimeDataAttr();
+            
+            // Initialize alarm system
+            initAlarmSystem();
         }
 
         // Add cyberpunk corner brackets
@@ -3573,6 +3887,243 @@
                 const timeText = $('.time-display').text();
                 $('.time-display').attr('data-text', timeText);
             }, 1000);
+        }
+
+        /* ===== ALARM CLOCK SYSTEM ===== */
+        let alarms = [];
+        let alarmAudio = null;
+        let alarmCheckInterval = null;
+
+        function initAlarmSystem() {
+            // Load alarms from localStorage
+            loadAlarms();
+            
+            // Start checking alarms every second
+            alarmCheckInterval = setInterval(checkAlarms, 1000);
+            
+            // Setup event listeners
+            $('#alarm-button').click(() => {
+                $('#alarm-modal').addClass('active');
+                renderAlarms();
+            });
+            
+            $('#close-alarm-modal').click(() => {
+                $('#alarm-modal').removeClass('active');
+            });
+            
+            $('#add-alarm-btn').click(addAlarm);
+            
+            $('#alarm-snooze').click(snoozeAlarm);
+            $('#alarm-dismiss').click(dismissAlarm);
+            
+            // Allow Enter key to add alarm
+            $('#alarm-time-input, #alarm-label-input').keypress(function(e) {
+                if (e.which === 13) addAlarm();
+            });
+        }
+
+        function loadAlarms() {
+            const saved = localStorage.getItem('alarms');
+            if (saved) {
+                try {
+                    alarms = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Failed to load alarms:', e);
+                    alarms = [];
+                }
+            }
+        }
+
+        function saveAlarms() {
+            localStorage.setItem('alarms', JSON.stringify(alarms));
+        }
+
+        function addAlarm() {
+            const time = $('#alarm-time-input').val();
+            const label = $('#alarm-label-input').val() || 'Alarm';
+            
+            if (!time) {
+                alert('Please select a time!');
+                return;
+            }
+            
+            const alarm = {
+                id: Date.now(),
+                time: time,
+                label: label,
+                enabled: true,
+                snoozed: false
+            };
+            
+            alarms.push(alarm);
+            saveAlarms();
+            renderAlarms();
+            
+            // Clear inputs
+            $('#alarm-label-input').val('');
+            
+            console.log('⏰ Alarm added:', alarm);
+        }
+
+        function deleteAlarm(id) {
+            alarms = alarms.filter(a => a.id !== id);
+            saveAlarms();
+            renderAlarms();
+            console.log('🗑️ Alarm deleted:', id);
+        }
+
+        function toggleAlarm(id) {
+            const alarm = alarms.find(a => a.id === id);
+            if (alarm) {
+                alarm.enabled = !alarm.enabled;
+                alarm.snoozed = false; // Reset snooze when toggling
+                saveAlarms();
+                renderAlarms();
+                console.log('🔔 Alarm toggled:', alarm);
+            }
+        }
+
+        function renderAlarms() {
+            const list = $('#alarm-list');
+            list.empty();
+            
+            if (alarms.length === 0) {
+                list.append('<div style="text-align:center; color:var(--neon-cyan); padding:20px;">No alarms set</div>');
+                return;
+            }
+            
+            alarms.forEach(alarm => {
+                const item = $(`
+                    <div class="alarm-item">
+                        <div>
+                            <div class="alarm-time">${formatAlarmTime(alarm.time)}</div>
+                            <div class="alarm-label">${alarm.label}${alarm.snoozed ? ' (Snoozed)' : ''}</div>
+                        </div>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <div class="alarm-toggle ${alarm.enabled ? 'active' : ''}" data-id="${alarm.id}"></div>
+                            <button class="alarm-delete" data-id="${alarm.id}">✕</button>
+                        </div>
+                    </div>
+                `);
+                
+                list.append(item);
+            });
+            
+            // Attach event listeners
+            $('.alarm-toggle').click(function() {
+                toggleAlarm(parseInt($(this).data('id')));
+            });
+            
+            $('.alarm-delete').click(function() {
+                deleteAlarm(parseInt($(this).data('id')));
+            });
+        }
+
+        function formatAlarmTime(time24) {
+            const [hours, minutes] = time24.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            return `${h12}:${minutes} ${ampm}`;
+        }
+
+        function checkAlarms() {
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            alarms.forEach(alarm => {
+                if (alarm.enabled && alarm.time === currentTime && !alarm.snoozed) {
+                    triggerAlarm(alarm);
+                }
+            });
+        }
+
+        function triggerAlarm(alarm) {
+            console.log('⏰ ALARM RINGING:', alarm);
+            
+            // Show overlay
+            $('#alarm-ringing').addClass('active');
+            $('#alarm-ringing-time').text(formatAlarmTime(alarm.time));
+            $('#alarm-ringing-label').text(alarm.label.toUpperCase());
+            
+            // Play alarm sound (using ahahah.mp3 as default)
+            playAlarmSound();
+            
+            // Store current alarm
+            window.currentAlarm = alarm;
+            
+            // Auto-dismiss after 5 minutes if not interacted with
+            window.alarmTimeout = setTimeout(() => {
+                dismissAlarm();
+            }, 300000);
+        }
+
+        function playAlarmSound() {
+            // Try to play the ahahah audio as alarm sound
+            if (!alarmAudio) {
+                alarmAudio = new Audio('ahahah.mp3');
+                alarmAudio.loop = true;
+            }
+            
+            alarmAudio.play().catch(err => {
+                console.log('Alarm audio blocked:', err);
+                // Fallback: browser beep or notification sound
+            });
+        }
+
+        function stopAlarmSound() {
+            if (alarmAudio) {
+                alarmAudio.pause();
+                alarmAudio.currentTime = 0;
+            }
+        }
+
+        function snoozeAlarm() {
+            console.log('😴 Snoozing alarm for 5 minutes');
+            
+            if (window.currentAlarm) {
+                // Create a new snooze alarm 5 minutes from now
+                const now = new Date();
+                now.setMinutes(now.getMinutes() + 5);
+                const snoozeTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                
+                const snoozeAlarm = {
+                    id: Date.now(),
+                    time: snoozeTime,
+                    label: window.currentAlarm.label + ' (Snoozed)',
+                    enabled: true,
+                    snoozed: true
+                };
+                
+                alarms.push(snoozeAlarm);
+                saveAlarms();
+            }
+            
+            dismissAlarm();
+        }
+
+        function dismissAlarm() {
+            console.log('✅ Alarm dismissed');
+            
+            // Hide overlay
+            $('#alarm-ringing').removeClass('active');
+            
+            // Stop sound
+            stopAlarmSound();
+            
+            // Clear timeout
+            if (window.alarmTimeout) {
+                clearTimeout(window.alarmTimeout);
+            }
+            
+            // Disable the alarm that just rang (unless it was snoozed)
+            if (window.currentAlarm && !window.currentAlarm.snoozed) {
+                window.currentAlarm.enabled = false;
+                saveAlarms();
+            }
+            
+            window.currentAlarm = null;
+            renderAlarms();
         }
 
         $(document).ready(initializeApp);

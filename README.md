@@ -1,250 +1,409 @@
-# Ultimate Smart Alarm Clock 🌦️⏰
+# 🌈⚡ Cyberpunk Smart Alarm Clock ⚡🌈
 
-A feature-packed smart alarm clock for 480x800 touchscreens with weather radar, Bitcoin/stocks, games, animal companions, and more!
+A **fully-featured smart alarm clock** with cyberpunk aesthetics, weather tracking, financial data, animated companions, and more! Built as a single HTML file for easy deployment to GitHub Pages.
 
-![Smart Alarm Clock](preview.png)
+![Cyberpunk Aesthetic](https://img.shields.io/badge/Style-Cyberpunk-ff006e?style=for-the-badge)
+![Screen Size](https://img.shields.io/badge/Screen-480x800-00f5ff?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Production-39ff14?style=for-the-badge)
 
-## 🎯 Features
+---
 
-### Core Features
-- **Live Clock** - Real-time clock with 12/24-hour format toggle
-- **Weather Display** - Current conditions, 5-day forecast, and radar
-- **Bitcoin & Stock Tracker** - Live prices from CoinGecko & AlphaVantage
-- **Weather Alerts** - Emergency alert system with audio warnings
-- **News Ticker** - Scrolling headlines from Google News
+## ✨ Features
 
-### Weather Effects
-- **Visual Effects** - Rain, snow, wind, and lightning animations
-- **Weather Radar** - Live radar map using RainViewer API
-- **Night Mode** - Auto-dimming (10pm-6am) or manual override
+### ⏰ **Alarm Clock** (New!)
+- **Set unlimited alarms** with custom times and labels
+- **Snooze function** (5 minutes)
+- **Toggle alarms on/off** with cyberpunk switches
+- **Persistent storage** - alarms survive page refresh
+- **Full-screen ringing overlay** with audio alert
+- Uses Nedry "ah ah ah!" sound (ahahah.mp3)
 
-### Fun Extras
-- **Animal Companions** - Fox 🦊 and Dog 🐕 that roam your screen
-- **Carrot Rain** - Easter egg: Make it rain carrots! 🥕
-- **Matrix Effect** - Falling green code animation 💻
-- **Tetris Game** - Classic game built-in 🎮
-- **Wolfenstein 3D** - Playable retro FPS 🔫
-- **Spotify Player** - Embedded Juice WRLD playlist 🎵
-- **Debug Panel** - Monitor all system states 🐞
+### 🕐 **Time & Date**
+- Large cyberpunk clock display (68px Orbitron font)
+- 12/24 hour format toggle
+- RGB chromatic aberration effect
+- Animated holographic gradients
+- Date display with neon green styling
+
+### 🌤️ **Weather**
+- **Live weather data** via OpenWeatherMap API
+- Current temperature and conditions
+- 5-day forecast with weather icons
+- **Live weather radar** (click-to-load)
+- Weather-based visual effects (rain, snow, wind)
+- **Emergency weather alerts** with audio warnings
+- ZIP code customizable
+
+### 💰 **Financial Data**
+- **Bitcoin price** (CoinGecko API)
+- **Stock prices** (AlphaVantage + Yahoo Finance fallback)
+- Real-time updates (1-minute intervals)
+- Customizable stock symbol (default: NVDA)
+- Large, readable prices (20px font)
+
+### 🛰️ **Weather Radar**
+- **Interactive map** with RainViewer overlay
+- Click 🛰️ button to load
+- Auto-refreshes every 5 minutes when active
+- Purple neon border with "RADAR SCAN" label
+- Cyberpunk color-shifted map
+
+### 🎮 **Games & Entertainment**
+- **Tetris** - Full playable game with scoring
+- **Wolfenstein 3D** - Embedded classic FPS
+- **Matrix effect** - Falling code animation
+- **Carrot rain** - Easter egg effect
+- **Nedry Easter Egg** - "Ah ah ah!" GIF + audio
+
+### 🦊🐰🐕 **Animated Companions**
+- **Fox** - Walks, wags tail, animated legs
+- **Bunny** - Hops with twitching ears
+- **Dog** - Bounces with floppy ears
+- **Give treats** - All companions celebrate together!
+- Hover for speech bubbles
+- Floating treat emojis (🥤🥕🦴)
+
+### 📰 **News & Media**
+- **Google News ticker** - Scrolling headlines
+- **CNBC Live Stream** - Click 📺 to watch
+- **Spotify Player** - Embedded music (Juice WRLD playlist)
+
+### 🎨 **Visual Effects**
+1. **CRT Scan Lines** - Retro monitor effect
+2. **Chromatic Aberration** - RGB color split on clock
+3. **Data Particles** - Floating binary code (30 particles)
+4. **Cyberpunk Corners** - Neon bracket accents on panels
+5. **Holographic Borders** - Rainbow animated borders
+6. **Glass Panels** - Frosted glass overlays on sections
+7. **VHS Distortion** - Edge color bleeding
+
+### 🌙 **Night Mode (E-Ink Display)**
+- **Black background, white text** for easy night reading
+- High contrast (pure #000000 / #ffffff)
+- **Removes all effects** (no scan lines, particles, glows)
+- Grayscale inverted icons and companions
+- Perfect for OLED battery saving
+- Eye strain reduction
+
+### ⚙️ **Customization**
+- **Settings modal** with all configurations
+- ZIP code for weather location
+- Stock symbol selection
+- Time format (12/24hr)
+- API key management
+- Debug panel for monitoring
+
+---
 
 ## 🚀 Quick Start
 
-### Local Testing
+### Option 1: GitHub Pages (Recommended)
 
-Simply open `index.html` in any modern browser!
+1. **Create a new repository**
+   ```bash
+   # On GitHub, create repo: "cyberpunk-clock"
+   ```
 
-## ⚙️ Configuration
+2. **Upload these 3 files to root:**
+   - `index.html` (main app)
+   - `ahahah.mp3` (alarm/easter egg audio)
+   - `ahahah.gif` (Nedry easter egg GIF)
 
-Click the ⚙️ Settings button to configure:
+3. **Enable GitHub Pages**
+   - Go to Settings → Pages
+   - Source: Deploy from branch → main
+   - Save
 
-- **ZIP Code** - Your location for weather data
-- **Stock Symbol** - Any stock ticker (default: NVDA)
-- **Time Format** - 12 or 24-hour display
-- **AlphaVantage API Key** - Optional (comes with fallback to Yahoo Finance)
+4. **Access your clock:**
+   ```
+   https://YOUR-USERNAME.github.io/cyberpunk-clock/
+   ```
 
-Settings are saved in browser localStorage.
+### Option 2: Local Testing
 
-## 🎮 Controls Guide
+1. **Download the files**
+2. **Open in browser:**
+   ```bash
+   # Double-click index.html, or:
+   python -m http.server 8000
+   # Then visit: http://localhost:8000
+   ```
 
-### Top Left Controls
-- ⚙️ **Settings** - Configure ZIP, stocks, time format
-- ☀️🌙 **Night Mode** - Toggle day/night brightness
-- 🐞 **Debug** - Show system status panel
+---
 
-### Top Right Controls
-- 🛰️ **Radar** - Toggle weather radar map
-- 📺 **Stocks** - Show/hide financial data
-- 📰 **News** - Scrolling news ticker
-- 🥕 **Carrot Rain** - Make it rain carrots!
+## 📱 Recommended Setup
 
-### Bottom Controls
-- 🎮 **Tetris** - Play Tetris
-- 🔫 **Wolf3D** - Play Wolfenstein 3D
-- 🦴 **Dog Treat** - Make dog happy
-- 🥤 **Mountain Dew** - Energize the fox
-- 💻 **Matrix** - Matrix falling code effect
+**Ideal Display:**
+- **480×800 portrait touchscreen** (like Raspberry Pi displays)
+- OLED or LCD panel
+- Touch-enabled for best experience
+
+**Works on:**
+- ✅ Desktop browsers (Chrome, Firefox, Edge, Safari)
+- ✅ Mobile browsers (responsive)
+- ✅ Raspberry Pi with touchscreen
+- ✅ Tablets in portrait mode
+
+---
+
+## 🔑 API Keys & Configuration
+
+### Free APIs Used (No Credit Card Required)
+
+| Service | Purpose | Free Tier | Get Key |
+|---------|---------|-----------|---------|
+| **OpenWeatherMap** | Weather data | Unlimited | [Get Key](https://openweathermap.org/api) |
+| **AlphaVantage** | Stock prices | 25 calls/day | [Get Key](https://www.alphavantage.co/support/#api-key) |
+| **CoinGecko** | Bitcoin price | Unlimited | No key needed |
+| **Yahoo Finance** | Stock fallback | Unlimited | No key needed |
+| **RainViewer** | Radar tiles | Unlimited | No key needed |
+
+### Setup API Keys
+
+1. Click **⚙️ Settings** button
+2. Enter your API keys:
+   - OpenWeatherMap API Key: `c8e85b9c5cd854c7aac3bb9042e0801b` (default)
+   - AlphaVantage API Key: `R83AYXIEJ0K71FUR` (default)
+3. Set your ZIP code (default: 63090)
+4. Set your stock symbol (default: NVDA)
+5. Click **Save**
+
+---
+
+## 🎮 Controls & Buttons
+
+### Top-Left Controls (2×2 Grid)
+- ⚙️ **Settings** - Configure app
+- ⏰ **Alarms** - Manage alarms
+- ☀️🌙 **Night Mode** - Toggle e-ink mode
+- 🐞 **Debug** - Show debug panel
+
+### Top-Right Controls (2×2 Grid)
+- 🛰️ **Radar** - Toggle weather radar
+- 📺 **Stocks** - (Reserved)
+- 📰 **News** - Toggle news ticker
+- 🥕 **Carrot Rain** - Easter egg
+
+### Bottom Controls (4×2 Grid)
+- 🎮 **Tetris** - Play game
+- 🔫 **Wolf3D** - Play FPS
+- 💻 **Matrix** - Toggle effect
 - 🎵 **Music** - Spotify player
-- 😂 **Ahahah** - Surprise!
+- 🦴 **Treat** - Give all companions treats
+- 🥤 **Dew** - Give fox Mountain Dew
+- 📺 **CNBC** - Live news stream
+- 😂 **Ahahah** - Nedry easter egg
+
+---
+
+## ⏰ How to Use Alarms
+
+1. **Click ⏰ button** (top-left)
+2. **Set time** using the time picker
+3. **Add label** (optional): "Wake up!", "Meeting", etc.
+4. **Click "Add Alarm"**
+5. **Toggle switch** to enable/disable
+6. **Delete** with ✕ button
+
+### When Alarm Rings:
+- Full-screen overlay appears
+- Audio plays (loops until dismissed)
+- Two options:
+  - **Snooze** (5 minutes)
+  - **Dismiss** (stops alarm)
+
+---
+
+## 🎨 Cyberpunk Aesthetic
+
+### Color Palette
+```css
+--neon-pink: #ff006e
+--neon-cyan: #00f5ff
+--neon-purple: #bf00ff
+--neon-green: #39ff14
+--neon-yellow: #ffea00
+--dark-bg: #0a0015
+```
+
+### Typography
+- **Display**: Orbitron (futuristic, bold)
+- **Body**: Rajdhani (clean, technical)
+- All text has neon glows and shadows
+
+### Visual Effects Stack
+1. Holographic animated backgrounds
+2. CRT scan lines overlay
+3. Data stream particles (30 binary floaters)
+4. Cyberpunk corner brackets
+5. Glass panel overlays
+6. RGB chromatic aberration
+7. VHS edge distortion
+
+---
+
+## 🌙 Night Mode (E-Ink)
+
+Toggle with ☀️🌙 button for **true dark mode**:
+
+**Features:**
+- Pure black background (#000000)
+- Pure white text (#ffffff)
+- All effects disabled
+- Grayscale inverted elements
+- High contrast for readability
+- Paper grain texture overlay
+- Perfect for nighttime bedside use
+
+---
 
 ## 🔧 Customization
 
 ### Change Default Location
-
-Edit line 278 in `index.html`:
+Edit in Settings or modify in code:
 ```javascript
-DEFAULT_ZIP: '63090', // Change to your ZIP code
+const CONFIG = {
+  DEFAULTS: {
+    zip: '63090',      // Your ZIP code
+    stock: 'NVDA',     // Your stock
+    timeFormat: '12hr' // or '24hr'
+  }
+};
 ```
 
-### Change Default Stock
-
-Edit line 279:
+### Change Alarm Sound
+Replace `ahahah.mp3` with your own audio file, or update:
 ```javascript
-DEFAULT_STOCK: 'NVDA', // Change to your preferred stock
+function playAlarmSound() {
+  alarmAudio = new Audio('your-sound.mp3');
+  alarmAudio.loop = true;
+  alarmAudio.play();
+}
 ```
 
-### Get Your Own API Keys (Free!)
-
-**OpenWeather API** (weather data):
-1. Sign up at https://openweathermap.org/api
-2. Get free API key (60 calls/min)
-3. Replace on line 277
-
-**AlphaVantage API** (stocks):
-1. Sign up at https://www.alphavantage.co/support/#api-key
-2. Get free API key (5 calls/min)
-3. Enter in Settings modal
-
-**Note**: The app comes with working demo keys and Yahoo Finance fallback!
-
-## 🎨 Weather Effects
-
-The app automatically shows visual effects based on current weather:
-
-- **Rain/Drizzle** → Falling raindrops
-- **Snow** → Snowflakes
-- **Thunderstorm** → Lightning flashes
-- **Wind** → Blowing wind effect
-- **Clouds** → Cloud overlay
-
-## 📡 APIs Used
-
-All free, no authentication required (except optional upgrades):
-
-- **Weather**: OpenWeatherMap API
-- **Radar**: RainViewer API
-- **Bitcoin**: CoinGecko API
-- **Stocks**: AlphaVantage + Yahoo Finance (fallback)
-- **Alerts**: National Weather Service API
-- **News**: Google News RSS
-- **Maps**: OpenStreetMap + Leaflet
-
-## 🎯 Use Cases
-
-### Raspberry Pi Touchscreen
-
-Perfect for 480x800 displays! Set up in kiosk mode:
-
-```bash
-chromium-browser --kiosk --incognito https://YOUR-USERNAME.github.io/smart-alarm-clock/
-```
-
-Auto-start on boot:
-```bash
-# Add to ~/.config/lxsession/LXDE-pi/autostart
-@chromium-browser --kiosk --incognito https://YOUR-USERNAME.github.io/smart-alarm-clock/
-```
-
-### Smart Mirror Display
-### Bedside Tablet
-### Kitchen Display
-### Office Dashboard
-
-## 🐛 Troubleshooting
-
-**Weather not loading?**
-- Check your ZIP code is valid US ZIP
-- Try refreshing the page
-- Check browser console for errors
-
-**Stock prices show "Unavailable"?**
-- AlphaVantage has rate limits (5/min free tier)
-- App will fallback to Yahoo Finance
-- Wait 1 minute and try again
-
-**Radar not showing?**
-- Click the 🛰️ button to toggle
-- Map loads on first toggle
-- Requires internet connection
-
-**Games not loading?**
-- Click button again
-- Check internet connection
-- Some games use external embeds
-
-## 🎮 Easter Eggs
-
-Try these:
-1. Click the carrot rain button 🥕
-2. Give the dog a treat 🦴
-3. Give the fox Mountain Dew 🥤
-4. Watch the fox dash randomly
-5. Try the ahahah button 😂
-6. Enable Matrix mode 💻
-
-## 📱 Browser Compatibility
-
-✅ Chrome/Chromium  
-✅ Firefox  
-✅ Safari  
-✅ Edge  
-✅ Mobile browsers  
-
-Optimized for 480x800 but works on any size!
-
-## 📊 Technical Details
-
-- **Framework**: Vanilla JS with jQuery
-- **File Size**: Single HTML file (~30KB)
-- **Dependencies**: jQuery, Moment.js, Leaflet (CDN)
-- **Storage**: localStorage for settings
-- **Refresh Rate**: 
-  - Clock: 1 second
-  - Weather: 10 minutes
-  - Stock: 1 minute
-  - Bitcoin: 1 minute
-  - Alerts: 15 minutes
-
-## 🎨 Design Features
-
-- Gradient backgrounds
-- Smooth transitions
-- Responsive buttons
-- Animated weather effects
-- Dynamic night mode
-- Debug panel for monitoring
-
-## 🔐 Privacy
-
-- All data stored locally in browser
-- No user tracking
-- No data sent to third parties
-- API calls only for public data
-- Can run fully offline (with cached data)
-
-## 📝 License
-
-MIT License - Use freely!
-
-## 🙏 Credits
-
-- Weather data: OpenWeatherMap
-- Radar: RainViewer
-- Stock data: AlphaVantage & Yahoo Finance
-- Bitcoin: CoinGecko
-- Alerts: National Weather Service
-- News: Google News RSS
-- Maps: OpenStreetMap & Leaflet
-- Icons: Native emoji
-
-## 🚀 Future Ideas
-
-- [ ] Multiple location support
-- [ ] Custom color themes
-- [ ] Alarm clock functionality
-- [ ] Calendar integration
-- [ ] Smart home controls
-- [ ] Voice commands
-- [ ] More games!
-
-## 💡 Contributing
-
-Found a bug? Have an idea? 
-- Open an issue on GitHub
-- Submit a pull request
-- Share your customizations!
+### Add More Stocks
+Modify the financial section to track multiple stocks.
 
 ---
 
-Made with ❤️ for the smart display community
+## 📊 Technical Details
 
-**Enjoy your ultimate smart alarm clock!** ⏰🎮🦊
+### File Structure
+```
+cyberpunk-clock/
+├── index.html      # Complete app (self-contained)
+├── ahahah.mp3      # Alarm & easter egg audio
+├── ahahah.gif      # Nedry easter egg GIF
+└── README.md       # This file
+```
+
+### Dependencies (CDN)
+- jQuery 3.6.0
+- Moment.js 2.29.1
+- Leaflet 1.7.1 (for maps)
+
+### Browser Storage
+- **localStorage** for:
+  - Settings (ZIP, stock, time format, API keys)
+  - Alarms (persistent across sessions)
+  - User preferences
+
+### Performance
+- Single HTML file (~3900 lines)
+- Minimal external dependencies
+- Optimized animations (CSS-only when possible)
+- Lazy-loaded iframes (games, music, news)
+
+---
+
+## 🐛 Troubleshooting
+
+### Alarms Not Ringing
+- ✅ Check alarm is enabled (toggle switch green)
+- ✅ Ensure time is correct (uses 24hr internally)
+- ✅ Check browser didn't block audio (autoplay policy)
+- ✅ Verify `ahahah.mp3` is in same directory
+
+### Weather Not Loading
+- ✅ Check API key is valid
+- ✅ Verify ZIP code is correct (US 5-digit)
+- ✅ Check browser console for errors
+- ✅ Try refreshing the page
+
+### Radar Not Loading
+- ✅ Click 🛰️ button to initialize
+- ✅ Check coordinates are valid
+- ✅ Look for "ERROR: Invalid location" message
+- ✅ Check browser console for Leaflet errors
+
+### Stock Prices Not Updating
+- ✅ AlphaVantage has 25/day limit (may hit limit)
+- ✅ Yahoo Finance is automatic fallback
+- ✅ Check "Yahoo" indicator if using fallback
+- ✅ Get your own free AlphaVantage key
+
+### Audio Not Playing
+- ✅ Browser may block autoplay - click page first
+- ✅ Check `ahahah.mp3` exists in root directory
+- ✅ Verify file is valid MP3 format
+- ✅ Check browser console for errors
+
+---
+
+## 🚀 Future Enhancements
+
+Potential features to add:
+- [ ] Multiple alarm sounds
+- [ ] Recurring alarms (daily, weekdays, etc.)
+- [ ] Custom color themes
+- [ ] More companion animals
+- [ ] Weather-based animations
+- [ ] Voice control
+- [ ] PWA support (installable)
+- [ ] Offline mode
+- [ ] Calendar integration
+- [ ] Multiple time zones
+
+---
+
+## 📄 License
+
+**MIT License** - Free to use, modify, and distribute
+
+---
+
+## 🙏 Credits
+
+**APIs & Services:**
+- OpenWeatherMap (weather data)
+- AlphaVantage (stock data)
+- CoinGecko (crypto data)
+- RainViewer (radar tiles)
+- Google News (RSS feeds)
+- Leaflet (mapping library)
+
+**Fonts:**
+- Orbitron (Google Fonts)
+- Rajdhani (Google Fonts)
+
+**Audio/Visual:**
+- Jurassic Park (Nedry "ah ah ah!")
+- Various neon/cyberpunk inspirations
+
+---
+
+## 💜 Enjoy Your Cyberpunk Clock!
+
+**Questions? Issues? Suggestions?**
+- Open an issue on GitHub
+- Check browser console for errors
+- Verify all 3 files are uploaded
+
+**Made with ⚡ and lots of neon 🌈**
+
+---
+
+**Version:** 2.0.0  
+**Last Updated:** February 2026  
+**Screen Size:** 480×800 (Portrait)  
+**Mode:** Cyberpunk Acid / E-Ink Dark
