@@ -504,12 +504,11 @@
 
         /* Main Container - 480x800 Portrait */
         .container {
-            width: 800px;
-            height: 480px;
+            width: 480px;
+            height: 800px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 450px 1fr;
-            grid-template-rows: auto 1fr 70px;
+            display: flex;
+            flex-direction: column;
             position: relative;
             overflow: hidden;
             border: 2px solid var(--neon-purple);
@@ -519,46 +518,12 @@
         }
 
         .content-wrapper {
-            grid-column: 1 / -1;
-            grid-row: 2;
+            flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 0;
-            display: grid;
-            grid-template-columns: 450px 1fr;
-            grid-template-rows: 1fr;
-            gap: 0;
+            padding-bottom: 75px;
             scrollbar-width: thin;
             scrollbar-color: var(--neon-pink) transparent;
-        }
-
-        /* LEFT COLUMN - MASSIVE TIME */
-        .time-header {
-            grid-column: 1;
-            grid-row: 1;
-            background: linear-gradient(135deg, 
-                rgba(191, 0, 255, 0.3) 0%, 
-                rgba(0, 245, 255, 0.2) 100%);
-            backdrop-filter: blur(20px);
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            border-right: 2px solid var(--neon-purple);
-            box-shadow: 5px 0 30px rgba(191, 0, 255, 0.5);
-        }
-
-        /* RIGHT COLUMN - Content Stack */
-        .right-column {
-            grid-column: 2;
-            grid-row: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 12px;
-            gap: 12px;
         }
 
         .content-wrapper::-webkit-scrollbar {
@@ -581,11 +546,12 @@
                 rgba(191, 0, 255, 0.3) 0%, 
                 rgba(0, 245, 255, 0.2) 100%);
             backdrop-filter: blur(20px);
-            padding: 15px;
+            padding: 60px 15px 25px;
             text-align: center;
             position: relative;
-            border-radius: 12px;
+            border-bottom: 2px solid var(--neon-purple);
             box-shadow: 0 5px 30px rgba(191, 0, 255, 0.5);
+            flex-shrink: 0;
         }
 
         .time-header::before {
@@ -624,36 +590,26 @@
 
         .date-display {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 24px;
-            margin-top: 12px;
+            font-size: 18px;
+            margin-top: 10px;
             color: var(--neon-green);
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             font-weight: 700;
-            text-shadow: 0 0 15px var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
         }
 
         /* Control Buttons - Compact Grid */
         .controls {
-            grid-row: 1;
+            position: absolute;
+            top: 8px;
             display: grid;
-            grid-template-columns: repeat(4, 34px);
-            grid-template-rows: 34px;
+            grid-template-columns: repeat(2, 34px);
             gap: 6px;
-            padding: 8px;
-            align-items: center;
-            z-index: 200;
         }
 
-        .controls.left { 
-            grid-column: 1;
-            justify-self: start;
-        }
-        
-        .controls.right { 
-            grid-column: 2;
-            justify-self: end;
-        }
+        .controls.left { left: 8px; }
+        .controls.right { right: 8px; }
 
         /* ===== ALARM CLOCK MODAL ===== */
         #alarm-modal {
@@ -978,18 +934,17 @@
 
         /* Weather Section - Larger & Centered */
         .weather-section {
-            padding: 10px 12px;
+            padding: 18px 20px;
             background: linear-gradient(135deg, 
                 rgba(255, 0, 110, 0.1) 0%, 
                 rgba(0, 245, 255, 0.1) 100%);
             backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
-            justify-content: flex-start;
-            gap: 12px;
+            justify-content: center;
+            gap: 15px;
             flex-shrink: 0;
             border-bottom: 1px solid rgba(0, 245, 255, 0.3);
-            border-radius: 8px;
             position: relative;
             overflow: hidden;
         }
@@ -1009,7 +964,7 @@
         }
 
         .weather-icon { 
-            font-size: 38px;
+            font-size: 52px;
             flex-shrink: 0;
             filter: drop-shadow(0 0 10px var(--neon-yellow));
             animation: float 3s ease-in-out infinite;
@@ -1019,12 +974,12 @@
             flex-shrink: 0;
             position: relative;
             z-index: 1;
-            text-align: left;
+            text-align: center;
         }
 
         .current-temp {
             font-family: 'Orbitron', monospace;
-            font-size: 26px;
+            font-size: 36px;
             font-weight: 700;
             background: linear-gradient(90deg, 
                 var(--neon-yellow), 
@@ -1037,9 +992,9 @@
         }
 
         .weather-desc {
-            font-size: 12px;
+            font-size: 15px;
             color: var(--neon-cyan);
-            margin-top: 3px;
+            margin-top: 5px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -1050,32 +1005,30 @@
 
         /* Financial Section - ENLARGED & Centered */
         .financial-section {
-            padding: 10px 12px;
+            padding: 20px 20px;
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(191, 0, 255, 0.3);
-            border-radius: 8px;
             flex-shrink: 0;
             border-left: 4px solid var(--neon-green);
             box-shadow: inset 0 0 30px rgba(57, 255, 20, 0.15);
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
+            align-items: center;
         }
 
         .financial-row {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 6px;
-            font-size: 15px;
+            margin-bottom: 12px;
+            font-size: 20px;
             line-height: 1.3;
             font-family: 'Orbitron', monospace;
             color: var(--neon-green);
             text-shadow: 0 0 8px var(--neon-green);
             font-weight: 700;
-            text-align: left;
+            text-align: center;
         }
 
         .financial-row:last-child {
@@ -1205,37 +1158,36 @@
 
         .forecast-day {
             text-align: center;
-            min-width: 62px;
+            min-width: 86px;
             background: linear-gradient(135deg, 
                 rgba(191, 0, 255, 0.2), 
                 rgba(0, 245, 255, 0.2));
-            padding: 8px 6px;
-            border-radius: 8px;
+            padding: 12px 10px;
+            border-radius: 10px;
             border: 2px solid var(--neon-purple);
-            box-shadow: 0 0 15px rgba(191, 0, 255, 0.4);
+            box-shadow: 0 0 20px rgba(191, 0, 255, 0.4);
             transition: all 0.3s;
-            flex: 0 0 auto;
-            max-width: 65px;
+            flex: 1;
+            max-width: 90px;
         }
 
         .forecast-day:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 25px rgba(191, 0, 255, 0.7);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 30px rgba(191, 0, 255, 0.7);
             border-color: var(--neon-pink);
         }
 
         .forecast-icon img {
-            width: 32px;
-            height: 32px;
-            filter: drop-shadow(0 0 6px var(--neon-cyan));
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 0 8px var(--neon-cyan));
         }
 
         .forecast-text {
-            font-size: 11px;
-            margin-top: 4px;
+            font-size: 15px;
+            margin-top: 6px;
             color: var(--neon-cyan);
             font-weight: 700;
-            line-height: 1.2;
         }
 
         /* News Ticker - Larger */
@@ -2056,9 +2008,9 @@
         /* Chromatic Aberration on Clock */
         .time-display {
             font-family: 'Orbitron', monospace;
-            font-size: 96px;
+            font-size: 68px;
             font-weight: 900;
-            letter-spacing: 8px;
+            letter-spacing: 4px;
             line-height: 1;
             background: linear-gradient(45deg, 
                 var(--neon-cyan), 
@@ -2069,10 +2021,48 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: holographic 3s ease infinite;
-            filter: drop-shadow(0 0 30px var(--neon-cyan));
-            min-height: 96px;
+            filter: drop-shadow(0 0 20px var(--neon-cyan));
+            min-height: 68px;
             display: inline-block;
             position: relative;
+        }
+
+        .time-display::before,
+        .time-display::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-display::before {
+            animation: glitch-anim-1 2.5s infinite;
+            color: var(--neon-pink);
+            z-index: -1;
+        }
+
+        .time-display::after {
+            animation: glitch-anim-2 3s infinite;
+            color: var(--neon-cyan);
+            z-index: -2;
+        }
+
+        @keyframes glitch-anim-1 {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            33% { transform: translate(-2px, 0); }
+            66% { transform: translate(2px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0%, 100% { transform: translate(0); opacity: 0.8; }
+            33% { transform: translate(2px, 0); }
+            66% { transform: translate(-2px, 0); }
         }
 
         /* VHS Edge Distortion */
@@ -2666,22 +2656,20 @@
 
         /* Bottom Controls - Larger Grid for Portrait */
         .bottom-controls {
-            grid-column: 1 / -1;
-            grid-row: 3;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
             display: grid;
-            grid-template-columns: repeat(8, 1fr);
+            grid-template-columns: repeat(4, 42px);
             gap: 8px;
-            padding: 10px;
-            background: rgba(10, 0, 21, 0.95);
-            border-top: 2px solid var(--neon-purple);
-            box-shadow: 0 -5px 30px rgba(191, 0, 255, 0.5);
-            z-index: 100;
+            z-index: 99;
         }
 
         .bottom-controls .control-btn {
-            width: 100%;
-            height: 50px;
-            font-size: 20px;
+            width: 42px;
+            height: 42px;
+            font-size: 18px;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             border: 2px solid var(--neon-cyan);
@@ -2716,81 +2704,78 @@
     <div id="data-particles"></div>
 
     <div class="container">
-        <!-- TOP CONTROLS ROW -->
-        <div class="controls left">
-            <button class="control-btn" id="settings-button" title="Settings">⚙️</button>
-            <button class="control-btn" id="alarm-button" title="Alarms">⏰</button>
-            <button class="control-btn" id="night-toggle" title="Night Mode">☀️🌙</button>
-            <button class="control-btn" id="debug-toggle" title="Debug">🐞</button>
-        </div>
-
-        <div class="controls right">
-            <button class="control-btn" id="radar-toggle" title="Radar">🛰️</button>
-            <button class="control-btn" id="stocks-toggle" title="Stocks">📺</button>
-            <button class="control-btn" id="news-toggle" title="News">📰</button>
-            <button class="control-btn" id="carrot-toggle" title="Carrot Rain">🥕</button>
-        </div>
-
-        <!-- MAIN CONTENT AREA -->
-        <div class="content-wrapper">
-            <!-- LEFT: MASSIVE TIME -->
-            <div class="time-header">
-                <div class="time-display" id="time">12:00:00</div>
-                <div class="date-display" id="date">Loading...</div>
+        <!-- Time Header -->
+        <div class="time-header">
+            <div class="controls left">
+                <button class="control-btn" id="settings-button" title="Settings">⚙️</button>
+                <button class="control-btn" id="alarm-button" title="Alarms">⏰</button>
+                <button class="control-btn" id="night-toggle" title="Night Mode">☀️🌙</button>
+                <button class="control-btn" id="debug-toggle" title="Debug">🐞</button>
             </div>
 
-            <!-- RIGHT: All Other Content -->
-            <div class="right-column">
-                <!-- Weather -->
-                <div class="weather-section">
-                    <div class="weather-icon" id="weatherIcon">🌤️</div>
-                    <div class="weather-info">
-                        <div class="current-temp" id="currentTemp">--°F</div>
-                        <div class="weather-desc" id="weatherDesc">Loading...</div>
-                    </div>
-                </div>
+            <div class="controls right">
+                <button class="control-btn" id="radar-toggle" title="Radar">🛰️</button>
+                <button class="control-btn" id="stocks-toggle" title="Stocks">📺</button>
+                <button class="control-btn" id="news-toggle" title="News">📰</button>
+                <button class="control-btn" id="carrot-toggle" title="Carrot Rain">🥕</button>
+            </div>
 
-                <!-- Financial -->
-                <div class="financial-section" id="stocks-container">
-                    <div class="financial-row">
-                        <span id="btcprice">BTC: Loading...</span>
-                    </div>
-                    <div class="financial-row">
-                        <span id="stockData">Stock: Loading...</span>
-                    </div>
-                </div>
-
-                <!-- Forecast -->
-                <div id="five-day-forecast"></div>
-
-                <!-- Alerts -->
-                <div id="weatherAlerts"></div>
-
-                <!-- Radar -->
-                <div id="radar-container">
-                    <div id="radar-map"></div>
-                    <div id="radar-timestamp">Radar loading...</div>
-                </div>
-
-                <!-- News -->
-                <div id="news-ticker">
-                    <div id="news-items">Loading news...</div>
-                </div>
-            </div><!-- End right-column -->
-        </div><!-- End content-wrapper -->
-
-        <!-- Bottom Controls - Single Row Landscape -->
-        <div class="bottom-controls">
-            <button class="control-btn" id="tetris-toggle" title="Tetris">🎮</button>
-            <button class="control-btn" id="wolf3d-gun-toggle" title="Wolf3D">🔫</button>
-            <button class="control-btn" id="matrix-toggle" title="Matrix">💻</button>
-            <button class="control-btn" id="spotifyPlayButton" title="Music">🎵</button>
-            <button class="control-btn" id="treat-toggle" title="Give Treat">🦴</button>
-            <button class="control-btn" id="dew-toggle" title="Mountain Dew">🥤</button>
-            <button class="control-btn" id="cnbc-toggle" title="CNBC Live">📺</button>
-            <button class="control-btn" id="ahahah-button" title="Ahahah">😂</button>
+            <div class="time-display" id="time">12:00:00</div>
+            <div class="date-display" id="date">Loading...</div>
         </div>
-    </div><!-- End container -->
+
+        <!-- Scrollable Content -->
+        <div class="content-wrapper">
+            <!-- Weather -->
+            <div class="weather-section">
+                <div class="weather-icon" id="weatherIcon">🌤️</div>
+                <div class="weather-info">
+                    <div class="current-temp" id="currentTemp">--°F</div>
+                    <div class="weather-desc" id="weatherDesc">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Financial -->
+            <div class="financial-section" id="stocks-container">
+                <div class="financial-row">
+                    <span id="btcprice">BTC: Loading...</span>
+                </div>
+                <div class="financial-row">
+                    <span id="stockData">Stock: Loading...</span>
+                </div>
+            </div>
+
+            <!-- Radar -->
+            <div id="radar-container">
+                <div id="radar-map"></div>
+                <div id="radar-timestamp">Radar loading...</div>
+            </div>
+
+            <!-- Forecast -->
+            <div id="five-day-forecast"></div>
+
+            <!-- Alerts -->
+            <div id="weatherAlerts"></div>
+
+            <!-- News -->
+            <div id="news-ticker">
+                <div id="news-items">Loading news...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Controls - Two Rows -->
+    <div class="bottom-controls">
+        <button class="control-btn" id="tetris-toggle" title="Tetris">🎮</button>
+        <button class="control-btn" id="wolf3d-gun-toggle" title="Wolf3D">🔫</button>
+        <button class="control-btn" id="matrix-toggle" title="Matrix">💻</button>
+        <button class="control-btn" id="spotifyPlayButton" title="Music">🎵</button>
+        <button class="control-btn" id="treat-toggle" title="Give Treat">🦴</button>
+        <button class="control-btn" id="dew-toggle" title="Mountain Dew">🥤</button>
+        <button class="control-btn" id="cnbc-toggle" title="CNBC Live">📺</button>
+        <button class="control-btn" id="ahahah-button" title="Ahahah">😂</button>
+    </div>
+
     <!-- Companions -->
     <div id="animal-companion">
         <div class="animal-body">
