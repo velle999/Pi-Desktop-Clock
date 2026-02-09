@@ -124,7 +124,349 @@
         }
 
         body.night-mode { 
-            filter: brightness(60%) saturate(120%);
+            filter: none; /* Remove the old dim filter */
+        }
+
+        /* ===== E-INK DISPLAY MODE (DARK) ===== */
+        body.night-mode {
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        /* Hide all effects in e-ink mode */
+        body.night-mode .crt-scanlines,
+        body.night-mode .crt-flicker,
+        body.night-mode #data-particles,
+        body.night-mode #weather-effects,
+        body.night-mode #carrot-layer,
+        body.night-mode .glass-overlay-panel,
+        body.night-mode .cyber-corners,
+        body.night-mode .corner-br {
+            display: none !important;
+        }
+
+        /* E-ink background */
+        body.night-mode::before,
+        body.night-mode::after {
+            display: none;
+        }
+
+        body.night-mode {
+            background: #0a0a0a !important;
+        }
+
+        /* Container - clean dark look */
+        body.night-mode .container {
+            background: #000000 !important;
+            border: 3px solid #ffffff !important;
+            box-shadow: 0 2px 8px rgba(255,255,255,0.1) !important;
+            animation: none !important;
+        }
+
+        body.night-mode .container::before,
+        body.night-mode .container::after {
+            display: none;
+        }
+
+        /* Time Header - Bold white text */
+        body.night-mode .time-header {
+            background: #000000 !important;
+            border-bottom: 3px solid #ffffff !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+        }
+
+        body.night-mode .time-header::before,
+        body.night-mode .time-header::after {
+            display: none !important;
+        }
+
+        body.night-mode .time-display {
+            background: none !important;
+            -webkit-text-fill-color: #ffffff !important;
+            color: #ffffff !important;
+            filter: none !important;
+            animation: none !important;
+            text-shadow: none !important;
+            font-weight: 900 !important;
+        }
+
+        body.night-mode .time-display::before,
+        body.night-mode .time-display::after {
+            display: none !important;
+        }
+
+        body.night-mode .date-display {
+            color: #cccccc !important;
+            text-shadow: none !important;
+            font-weight: 600 !important;
+        }
+
+        /* Weather Section */
+        body.night-mode .weather-section {
+            background: #0a0a0a !important;
+            border-bottom: 2px solid #ffffff !important;
+            backdrop-filter: none !important;
+        }
+
+        body.night-mode .weather-section::before,
+        body.night-mode .weather-section::after {
+            display: none !important;
+        }
+
+        body.night-mode .weather-icon {
+            filter: grayscale(1) contrast(1.2) invert(1) !important;
+            animation: none !important;
+        }
+
+        body.night-mode .current-temp {
+            background: none !important;
+            -webkit-text-fill-color: #ffffff !important;
+            color: #ffffff !important;
+            text-shadow: none !important;
+            font-weight: 900 !important;
+        }
+
+        body.night-mode .weather-desc {
+            color: #cccccc !important;
+            font-weight: 600 !important;
+        }
+
+        /* Financial Section */
+        body.night-mode .financial-section {
+            background: #000000 !important;
+            border-bottom: 2px solid #ffffff !important;
+            border-left: 5px solid #ffffff !important;
+            backdrop-filter: none !important;
+            box-shadow: none !important;
+        }
+
+        body.night-mode .financial-section::before,
+        body.night-mode .financial-section::after {
+            display: none !important;
+        }
+
+        body.night-mode .financial-row {
+            color: #ffffff !important;
+            text-shadow: none !important;
+            font-weight: 700 !important;
+        }
+
+        /* Forecast Cards */
+        body.night-mode #five-day-forecast {
+            background: #0a0a0a !important;
+        }
+
+        body.night-mode #five-day-forecast::after {
+            display: none !important;
+        }
+
+        body.night-mode .forecast-day {
+            background: #000000 !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 1px 3px rgba(255,255,255,0.2) !important;
+            animation: none !important;
+        }
+
+        body.night-mode .forecast-day::before {
+            display: none !important;
+        }
+
+        body.night-mode .forecast-icon img {
+            filter: grayscale(1) contrast(1.3) invert(1) !important;
+        }
+
+        body.night-mode .forecast-text {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+
+        /* Radar */
+        body.night-mode #radar-container {
+            border: 3px solid #ffffff !important;
+            background: #000000 !important;
+            box-shadow: none !important;
+        }
+
+        body.night-mode #radar-container::before {
+            color: #ffffff !important;
+            background: #000000 !important;
+            border: 2px solid #ffffff !important;
+            text-shadow: none !important;
+        }
+
+        body.night-mode #radar-map {
+            filter: grayscale(1) contrast(1.5) invert(1) !important;
+        }
+
+        body.night-mode #radar-timestamp {
+            background: #000000 !important;
+            border: 2px solid #ffffff !important;
+            color: #ffffff !important;
+            text-shadow: none !important;
+        }
+
+        /* Control Buttons - Simple white outlines */
+        body.night-mode .control-btn {
+            background: #000000 !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 1px 2px rgba(255,255,255,0.2) !important;
+            filter: grayscale(1) invert(1) !important;
+            background-image: none !important;
+        }
+
+        body.night-mode .control-btn::before {
+            display: none !important;
+        }
+
+        body.night-mode .control-btn:hover {
+            background: #1a1a1a !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 2px 4px rgba(255,255,255,0.3) !important;
+        }
+
+        body.night-mode .bottom-controls .control-btn {
+            background: #000000 !important;
+            border: 2px solid #ffffff !important;
+        }
+
+        /* Companions - Grayscale Inverted */
+        body.night-mode #animal-companion,
+        body.night-mode #bunny-companion,
+        body.night-mode #dog-companion {
+            filter: grayscale(1) contrast(1.2) invert(1) !important;
+        }
+
+        body.night-mode .animal-message,
+        body.night-mode .bunny-message,
+        body.night-mode .dog-message {
+            background: #000000 !important;
+            color: #ffffff !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 2px 4px rgba(255,255,255,0.2) !important;
+        }
+
+        /* Modals */
+        body.night-mode .modal {
+            background: rgba(0, 0, 0, 0.95) !important;
+        }
+
+        body.night-mode .modal-content {
+            background: #000000 !important;
+            border: 3px solid #ffffff !important;
+            box-shadow: 0 4px 8px rgba(255,255,255,0.2) !important;
+            backdrop-filter: none !important;
+        }
+
+        body.night-mode .modal-header {
+            background: none !important;
+            -webkit-text-fill-color: #ffffff !important;
+            color: #ffffff !important;
+            text-shadow: none !important;
+        }
+
+        body.night-mode .form-label {
+            color: #ffffff !important;
+        }
+
+        body.night-mode .form-input {
+            background: #0a0a0a !important;
+            border: 2px solid #ffffff !important;
+            color: #ffffff !important;
+        }
+
+        body.night-mode .form-input::placeholder {
+            color: #666666 !important;
+        }
+
+        body.night-mode .btn-primary {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: none !important;
+        }
+
+        body.night-mode .btn-primary:hover {
+            background: #e0e0e0 !important;
+        }
+
+        body.night-mode .btn-secondary {
+            background: #000000 !important;
+            color: #ffffff !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: none !important;
+        }
+
+        body.night-mode .btn-secondary:hover {
+            background: #1a1a1a !important;
+        }
+
+        /* News Ticker */
+        body.night-mode #news-ticker {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border-top: 2px solid #ffffff !important;
+            border-bottom: 2px solid #ffffff !important;
+        }
+
+        body.night-mode #news-items {
+            color: #000000 !important;
+        }
+
+        /* Alerts */
+        body.night-mode #weatherAlerts {
+            background: #0a0a0a !important;
+        }
+
+        body.night-mode .alert {
+            background: #000000 !important;
+            border: 2px solid #ffffff !important;
+            border-left: 5px solid #ffffff !important;
+            color: #ffffff !important;
+            box-shadow: none !important;
+            animation: none !important;
+        }
+
+        /* Scrollbar */
+        body.night-mode .content-wrapper::-webkit-scrollbar-thumb {
+            background: #ffffff !important;
+            box-shadow: none !important;
+        }
+
+        body.night-mode .content-wrapper::-webkit-scrollbar-track {
+            background: #1a1a1a !important;
+        }
+
+        /* E-ink texture overlay - inverted */
+        body.night-mode::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 1px,
+                    rgba(255,255,255,0.01) 1px,
+                    rgba(255,255,255,0.01) 2px
+                );
+            pointer-events: none;
+            z-index: 99999;
+            opacity: 0.3;
+            display: block;
+        }
+
+        /* Games in dark mode */
+        body.night-mode #tetris-wrapper,
+        body.night-mode #wolf3d-wrapper {
+            border-color: #ffffff !important;
+        }
+
+        body.night-mode #tetris-canvas {
+            border-color: #ffffff !important;
         }
 
         /* Weather Effects Container */
