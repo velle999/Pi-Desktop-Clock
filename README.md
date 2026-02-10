@@ -162,8 +162,8 @@ A **fully-featured smart alarm clock** with cyberpunk aesthetics, weather tracki
 
 1. Click **⚙️ Settings** button
 2. Enter your API keys:
-   - OpenWeatherMap API Key: `c8e85b9c5cd854c7aac3bb9042e0801b` (default)
-   - AlphaVantage API Key: `R83AYXIEJ0K71FUR` (default)
+   - OpenWeatherMap API Key: `` (default)
+   - AlphaVantage API Key: `` (default)
 3. Set your ZIP code (default: 63090)
 4. Set your stock symbol (default: NVDA)
 5. Click **Save**
