@@ -97,29 +97,7 @@ A **fully-featured smart alarm clock** with cyberpunk aesthetics, weather tracki
 
 ## 🚀 Quick Start
 
-### Option 1: GitHub Pages (Recommended)
-
-1. **Create a new repository**
-   ```bash
-   # On GitHub, create repo: "cyberpunk-clock"
-   ```
-
-2. **Upload these 3 files to root:**
-   - `index.html` (main app)
-   - `ahahah.mp3` (alarm/easter egg audio)
-   - `ahahah.gif` (Nedry easter egg GIF)
-
-3. **Enable GitHub Pages**
-   - Go to Settings → Pages
-   - Source: Deploy from branch → main
-   - Save
-
-4. **Access your clock:**
-   ```
-   https://YOUR-USERNAME.github.io/cyberpunk-clock/
-   ```
-
-### Option 2: Local Testing
+Local Testing
 
 1. **Download the files**
 2. **Open in browser:**
